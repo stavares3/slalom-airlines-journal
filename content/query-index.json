@@ -1,0 +1,18 @@
+{
+  "total": 1,
+  "offset": 0,
+  "limit": 1,
+  "columns": ["path", "title", "description", "image", "author", "date", "template"],
+  "data": [
+    {
+      "path": "/articles/window-seat-science",
+      "title": "Window seat science",
+      "description": "The case for seat A on a morning departure, where the sunrise and the captain's own view line up.",
+      "image": "/media/wing-clouds.jpg",
+      "author": "Mara Ellison",
+      "date": "2026-09-02",
+      "template": "article"
+    }
+  ],
+  ":type": "sheet"
+}

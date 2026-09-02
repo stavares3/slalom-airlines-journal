@@ -1,0 +1,375 @@
+/*
+ * Slalom Airlines Journal, base styles (Phase 4, task E4-0).
+ * Token custom properties ported from prototype/src/styles/tokens.css.
+ * Spectrum stops are used as solid accents only; the single gradient token
+ * kept here (--grad-horizon) is reserved for the masthead swoosh, the one
+ * gradient moment the brand system allows the Journal.
+ * Structure follows the aem-boilerplate styles.css shape (body.appear gate,
+ * block visibility gates, section rhythm, button grammar).
+ */
+
+:root {
+  /* Brand color system, ported from the prototype (spec section 2) */
+  --color-midnight: #0A1428;
+  --color-space: #060D1F;
+  --color-navy-800: #101E3C;
+  --color-navy-700: #16294E;
+  --color-glacier: #7FB7D9;
+  --color-slalom-blue: #0C62FB;
+  --color-accent: #4FC9E8;
+  --color-accent-bright: #7ADCF5;
+  --color-accent-warm: #F2A93B;
+  --color-ivory: #F7F4EE;
+  --color-ink: #131722;
+  --color-mist: #A8B3C7;
+  --color-success: #3EAE7C;
+  --color-warn: #D9A03E;
+  --color-error: #C4554D;
+  --grad-horizon: linear-gradient(100deg, #2E5BE8 0%, #4FC9E8 36%, #6FE3B0 68%, #F2A93B 100%);
+
+  /* Typography */
+  --font-display: "Fraunces Variable", fraunces-fallback, Georgia, serif;
+  --font-sans: "Inter Variable", inter-fallback, "Segoe UI", system-ui, sans-serif;
+  --text-xs: .78rem;
+  --text-sm: .9rem;
+  --text-md: 1rem;
+  --text-lg: 1.18rem;
+  --display-md: clamp(1.6rem, 1.1rem + 2vw, 2.6rem);
+  --display-lg: clamp(2.2rem, 1.4rem + 3.4vw, 4rem);
+  --display-xl: clamp(2.8rem, 1.6rem + 5vw, 5.6rem);
+
+  /* Space / radius / shadow / motion */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6.5rem;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 2px 8px rgba(6, 13, 31, .18), 0 12px 32px rgba(6, 13, 31, .22);
+  --shadow-glow: 0 6px 28px rgba(79, 201, 232, .28);
+  --ease-out-expo: cubic-bezier(.22, 1, .36, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 900ms;
+  --container: 76rem;
+  --header-h: 4.5rem;
+
+  /* Journal surface: the editorial side of the brand reads as ivory paper
+     with ink type, against the flagship site's midnight product surfaces. */
+  --background-color: var(--color-ivory);
+  --text-color: var(--color-ink);
+  --muted-color: #5A6478;
+  --rule-color: rgba(19, 23, 34, .14);
+  --link-color: var(--color-slalom-blue);
+  --link-hover-color: #0A4FC9;
+}
+
+/* Metric-compatible fallbacks so text does not shift when the woff2 arrive */
+@font-face {
+  font-family: fraunces-fallback;
+  size-adjust: 103%;
+  src: local("Georgia");
+}
+
+@font-face {
+  font-family: inter-fallback;
+  size-adjust: 107%;
+  src: local("Arial");
+}
+
+body {
+  display: none;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  line-height: 1.65;
+}
+
+body.appear {
+  display: block;
+}
+
+header {
+  height: var(--header-h);
+}
+
+header .header,
+footer .footer {
+  visibility: hidden;
+}
+
+header .header[data-block-status="loaded"],
+footer .footer[data-block-status="loaded"] {
+  visibility: visible;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: .9em;
+  margin-bottom: .3em;
+  font-family: var(--font-display);
+  font-weight: 560;
+  line-height: 1.14;
+  letter-spacing: -.01em;
+  color: var(--color-midnight);
+  scroll-margin: calc(var(--header-h) + var(--space-3));
+}
+
+h1 {
+  font-size: var(--display-lg);
+  font-weight: 600;
+}
+
+h2 { font-size: var(--display-md); }
+h3 { font-size: 1.45rem; }
+h4 { font-size: 1.2rem; }
+h5 { font-size: var(--text-md); }
+h6 { font-size: var(--text-sm); }
+
+p,
+dl,
+ol,
+ul,
+pre,
+blockquote {
+  margin-top: .8em;
+  margin-bottom: .35em;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: var(--space-2) var(--space-4);
+  border-left: 3px solid var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1.45;
+  color: var(--color-navy-700);
+}
+
+code,
+pre {
+  font-size: var(--text-sm);
+}
+
+code {
+  padding: .1em .35em;
+  border-radius: var(--radius-sm);
+  background-color: rgba(16, 30, 60, .08);
+}
+
+pre {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-navy-800);
+  color: var(--color-ivory);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+}
+
+main > div {
+  margin: var(--space-5) var(--space-3);
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+/* links */
+a:any-link {
+  color: var(--link-color);
+  text-decoration: none;
+  overflow-wrap: break-word;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-slalom-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* buttons */
+p.button-wrapper {
+  margin: var(--space-3) 0;
+}
+
+a.button:any-link,
+button.button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  margin: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: .55em 1.4em;
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 560;
+  line-height: 1.25;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out-expo), border-color var(--dur-fast) var(--ease-out-expo), color var(--dur-fast) var(--ease-out-expo);
+}
+
+a.button[aria-disabled="true"],
+button.button:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: .55;
+}
+
+a.button.primary,
+button.button.primary {
+  border-color: var(--color-midnight);
+  background-color: var(--color-midnight);
+  color: var(--color-ivory);
+}
+
+a.button.primary:hover,
+a.button.primary:focus-visible,
+button.button.primary:hover,
+button.button.primary:focus-visible {
+  border-color: var(--color-navy-700);
+  background-color: var(--color-navy-700);
+  color: var(--color-ivory);
+  text-decoration: none;
+}
+
+a.button.secondary,
+button.button.secondary {
+  border-color: var(--color-midnight);
+  background-color: transparent;
+  color: var(--color-midnight);
+}
+
+a.button.secondary:hover,
+a.button.secondary:focus-visible,
+button.button.secondary:hover,
+button.button.secondary:focus-visible {
+  background-color: rgba(10, 20, 40, .08);
+  text-decoration: none;
+}
+
+a.button.accent,
+button.button.accent {
+  border-color: var(--color-slalom-blue);
+  background-color: var(--color-slalom-blue);
+  color: #FFFFFF;
+}
+
+a.button.accent:hover,
+a.button.accent:focus-visible,
+button.button.accent:hover,
+button.button.accent:focus-visible {
+  border-color: var(--link-hover-color);
+  background-color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+main img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.icon {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+}
+
+.icon img {
+  height: 100%;
+  width: 100%;
+}
+
+/* sections */
+main > .section {
+  margin: var(--space-5) 0;
+}
+
+main > .section > div {
+  max-width: var(--container);
+  margin: auto;
+  padding: 0 var(--space-4);
+}
+
+main > .section:first-of-type {
+  margin-top: 0;
+}
+
+@media (width >= 900px) {
+  main > .section > div {
+    padding: 0 var(--space-5);
+  }
+}
+
+/* Article body measure: rendered document content stays readable */
+main .default-content-wrapper {
+  max-width: 44rem;
+}
+
+main .default-content-wrapper p {
+  color: var(--text-color);
+}
+
+/* section metadata styles */
+main .section.light,
+main .section.highlight {
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: var(--space-5) 0;
+}
+
+main .section.midnight {
+  background-color: var(--color-midnight);
+  color: var(--color-ivory);
+  margin: 0;
+  padding: var(--space-5) 0;
+}
+
+main .section.midnight h1,
+main .section.midnight h2,
+main .section.midnight h3 {
+  color: var(--color-ivory);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

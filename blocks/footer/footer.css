@@ -1,0 +1,70 @@
+/* Journal footer: quiet midnight band closing the page. Solid accents only. */
+
+footer .footer {
+  margin-top: var(--space-6);
+  background-color: var(--color-midnight);
+  color: var(--color-ivory);
+}
+
+footer .footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+footer .footer-wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+footer .footer-tagline {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-glacier);
+  letter-spacing: .06em;
+}
+
+footer .footer-nav-list {
+  list-style: none;
+  display: flex;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+}
+
+footer .footer-nav-link {
+  font-size: var(--text-sm);
+  font-weight: 560;
+  color: var(--color-ivory);
+  text-decoration: none;
+}
+
+footer .footer-nav-link:hover,
+footer .footer-nav-link:focus-visible {
+  color: var(--color-accent-bright);
+  text-decoration: underline;
+}
+
+footer .footer-legal {
+  grid-column: 1 / -1;
+  border-top: 1px solid rgba(247, 244, 238, .14);
+  padding-top: var(--space-3);
+}
+
+footer .footer-legal p {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-mist);
+}
+
+@media (width < 600px) {
+  footer .footer-inner {
+    grid-template-columns: 1fr;
+  }
+}

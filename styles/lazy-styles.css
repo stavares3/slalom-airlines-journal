@@ -1,0 +1,19 @@
+/*
+ * Below-the-fold styles, loaded by loadLazy after LCP. Kept intentionally
+ * small in E4-0; later tasks add card hover states and player chrome here.
+ */
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-midnight);
+}
+
+main .default-content-wrapper a:not(.button) {
+  text-decoration: underline;
+  text-decoration-color: rgba(12, 98, 251, .35);
+  text-underline-offset: .18em;
+}
+
+main .default-content-wrapper a:not(.button):hover {
+  text-decoration-color: var(--link-hover-color);
+}

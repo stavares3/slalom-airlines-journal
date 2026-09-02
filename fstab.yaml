@@ -1,0 +1,32 @@
+# Slalom Airlines Journal, content mountpoint marker (Phase 4, task E4-0).
+#
+# CONTENT IN CODE. This project carries its documents inside the repository:
+# da.live storage format HTML under content/ (see content/index.html and
+# content/articles/*.html). The current @adobe/aem-cli (16.21.15) auto detects
+# a local content/ directory and serves it through the production render
+# pipeline (html2md then helix-html-pipeline), so `aem up` previews the whole
+# journal with zero remote content source. Empirically verified mapping:
+#
+#   URL /                      -> content/index.html   (rendered page)
+#   URL /articles/<slug>       -> content/articles/<slug>.html (rendered page)
+#   URL /<path>.plain.html     -> the same document, main fragment only
+#   URL /query-index.json      -> content/query-index.json (served raw)
+#   any other extension        -> raw file from content/, then repo root
+#
+# NOTE ON MARKDOWN: the plan's default layout was markdown in content/. The
+# CLI serves local .md files RAW ONLY and never renders them (its local
+# pipeline reads .html documents, converting them back to markdown itself via
+# html2md before rendering). The layout was therefore restructured at build
+# time of E4-0 to da.live storage HTML, which is the exact format
+# `aem content clone` and da.live use, so the deploy path stays "push these
+# documents to da.live unchanged".
+#
+# At deploy time this file gains a real mountpoint and the documents move to
+# the mounted source (da.live, SharePoint, or Google Drive), for example:
+#
+#   mountpoints:
+#     /: https://content.da.live/<org>/<site>/
+#
+# No mountpoint is declared today on purpose: nothing remote is provisioned in
+# Phase 4 (preview only, no aem.live org, no Code Sync).
+mountpoints: {}
