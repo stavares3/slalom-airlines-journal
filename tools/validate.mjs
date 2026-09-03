@@ -132,6 +132,9 @@ for (const doc of contentDocs) {
         errors.push(`${name}: Template ${rows.Template} requires a ${requiredBlock} block in the document`);
       }
     }
+    if (!html.includes('class="article-header"')) {
+      errors.push(`${name}: missing article-header block`);
+    }
   }
 
   // Tags row conformance (required on articles above; validated wherever a

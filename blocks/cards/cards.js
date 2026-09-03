@@ -45,7 +45,7 @@ export default async function decorate(block) {
 
   const entries = (await fetchIndex(source))
     .filter((entry) => entry.path && entry.title)
-    .sort((a, b) => ((a.date || '') < (b.date || '') ? 1 : -1));
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   if (!entries.length) {
     const empty = document.createElement('p');

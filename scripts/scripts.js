@@ -118,7 +118,7 @@ function bootDataLayer() {
     .filter(Boolean);
   initDataLayer({
     pageName: getMetadata('og:title') || document.title,
-    template: getMetadata('template') || 'journal',
+    template: getMetadata('template') || 'journal-home',
     subSection: window.location.pathname.startsWith('/articles/') ? 'articles' : 'journal',
     date: getMetadata('date'),
     tags,
