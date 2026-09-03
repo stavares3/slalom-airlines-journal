@@ -4,7 +4,7 @@
   "type": "module",
   "description": "The Journal. Document-authored Edge Delivery Services blog for Slalom Airlines (fictional demo brand). Content lives in content/ as da.live storage HTML and renders locally through `npm run up` with no remote content source.",
   "scripts": {
-    "up": "node tools/ensure-git-stub.mjs && npx -y @adobe/aem-cli up --no-open --url https://main--journal--slalom-airlines.aem.page",
+    "up": "node tools/ensure-git-stub.mjs && npx -y @adobe/aem-cli up --no-open --url https://journal-local-placeholder.aem.page",
     "validate": "node tools/validate.mjs"
   },
   "aemCliNotes": {

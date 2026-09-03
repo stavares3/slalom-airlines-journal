@@ -18,8 +18,9 @@
  * commits all normal), while the aem CLI finds everything it looks for. The
  * origin URL "." intentionally fails the CLI's GitUrl parser, which makes it
  * fall back to the --url flag passed by the `up` script (a placeholder
- * aem.page host that only ever sees the CLI's own head.html/metadata.json
- * probes and would-be-404 misses; the git remote itself is never contacted).
+ * aem.page host with no ref--site--org shape, so no aem.page registration
+ * can ever route it; it sees the CLI's own probes and would-be-404 misses
+ * as permanent 404s, and the git remote itself is never contacted).
  *
  * Git never tracks paths containing a .git segment, so this stub can not be
  * committed; it is recreated on demand instead, which is why this script
@@ -38,6 +39,15 @@ const FILES = {
   "refs/heads/main": "074c3880440ffcf729cff911cd76bddf2cc8930b\n",
   config: '[core]\n\trepositoryformatversion = 0\n\tbare = false\n[remote "origin"]\n\turl = .\n',
 };
+
+// A real repository at eds-blog/.git (even a fresh init) has objects/; the
+// stub deliberately does not. Never touch a real repo: a per-file guard alone
+// would write a loose refs/heads/main into a packed-refs repository and
+// corrupt it (E4-0 review finding 1, reproduced).
+if (existsSync(path.join(GIT, "objects"))) {
+  console.log("real repository at eds-blog/.git, leaving it untouched");
+  process.exit(0);
+}
 
 let created = 0;
 for (const [relPath, content] of Object.entries(FILES)) {
