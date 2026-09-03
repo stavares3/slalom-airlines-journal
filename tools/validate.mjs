@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const EXPECTED = { blocks: 7, articles: 1 };
+const EXPECTED = { blocks: 7, articles: 6 };
 
 // Article Template row values and the media block each one must embed
 // (task E4-2): podcast pages carry the podcast player, film pages carry the
