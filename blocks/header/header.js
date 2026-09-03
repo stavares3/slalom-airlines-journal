@@ -9,6 +9,8 @@
  * out of scope now; nothing else changes in this block when that lands.
  */
 
+import { registerComponent } from '../../scripts/datalayer.js';
+
 const SECTIONS = [
   ['Stories', '/#stories'],
   ['Podcasts', '/#podcasts'],
@@ -55,4 +57,6 @@ export default async function decorate(block) {
 
   inner.append(brand, nav);
   block.append(inner);
+
+  registerComponent(block, 'header', 'Journal masthead');
 }

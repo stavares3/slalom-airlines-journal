@@ -107,15 +107,21 @@ export function decorateMain(main) {
 
 /**
  * Seeds the data layer from the rendered head. The metadata block in each
- * document becomes meta tags at render time; this reads them back out.
+ * document becomes meta tags at render time; this reads them back out. Tags
+ * ride the document's metadata Tags row, which the pipeline renders as one
+ * article:tag meta per value; getMetadata joins them back with ", ".
  */
 function bootDataLayer() {
+  const tags = getMetadata('article:tag')
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean);
   initDataLayer({
     pageName: getMetadata('og:title') || document.title,
     template: getMetadata('template') || 'journal',
     subSection: window.location.pathname.startsWith('/articles/') ? 'articles' : 'journal',
     date: getMetadata('date'),
-    tags: [],
+    tags,
   });
 }
 

@@ -4,6 +4,8 @@
  * zero content fetches. All strings are static and set via textContent.
  */
 
+import { registerComponent } from '../../scripts/datalayer.js';
+
 const SECTIONS = [
   ['Stories', '/#stories'],
   ['Podcasts', '/#podcasts'],
@@ -47,4 +49,6 @@ export default async function decorate(block) {
 
   inner.append(brandCol, nav, legal);
   block.append(inner);
+
+  registerComponent(block, 'footer', 'Journal footer');
 }

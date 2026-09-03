@@ -1,0 +1,52 @@
+/* Article header: the magazine deck line under the title. Aligns to the
+   44rem article measure and closes with a hairline rule before body copy. */
+
+main .article-header-wrapper {
+  max-width: 44rem;
+}
+
+main .article-header {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule-color);
+}
+
+main .article-header .article-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted-color);
+}
+
+main .article-header .article-header-byline {
+  font-weight: 620;
+  color: var(--color-navy-700);
+}
+
+main .article-header .article-header-dot {
+  color: var(--rule-color);
+}
+
+main .article-header .article-header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+
+main .article-header .article-header-tag {
+  margin: 0;
+  border: 1px solid var(--rule-color);
+  border-radius: var(--radius-pill);
+  padding: .2em .85em;
+  font-size: var(--text-xs);
+  font-weight: 620;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-navy-700);
+  background-color: #FFFFFF;
+}

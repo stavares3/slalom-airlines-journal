@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const EXPECTED = { blocks: 2, articles: 1 };
+const EXPECTED = { blocks: 5, articles: 1 };
 
 // Brand guardrails, mirrored from prototype/scripts/verify.mjs so the same
 // retired names and copy rules bind both sites.
@@ -26,7 +26,12 @@ const BANNED_CASE_INSENSITIVE = ["C9A96A", "D4B87E"];
 // en dashes must never appear, raw or as entity spellings. Hyphens are fine.
 const BANNED_ALWAYS = ["—", "–", "&mdash;", "&ndash;", "&#8212;", "&#8211;", "&#x2014;", "&#x2013;"];
 
-const REQUIRED_METADATA_ROWS = ["Title", "Description", "Author", "Date", "Template"];
+const REQUIRED_METADATA_ROWS = ["Title", "Description", "Author", "Date", "Template", "Tags"];
+
+// Journal taxonomy: every Tags value is a namespaced AEM tag id on the
+// slalomair namespace using a known facet (data-layer-dictionary.md sections
+// 1.1 and 1.1a). New facets require a dictionary revision first.
+const KNOWN_TAG_FACETS = ["page-type", "journey", "product", "destination"];
 
 const errors = [];
 
@@ -112,6 +117,21 @@ for (const doc of contentDocs) {
       }
       if (rows.Date && !/^\d{4}-\d{2}-\d{2}$/.test(rows.Date)) {
         errors.push(`${name}: metadata Date "${rows.Date}" is not an ISO date`);
+      }
+    }
+  }
+
+  // Tags row conformance (required on articles above; validated wherever a
+  // document carries one): slalomair namespace, known facets only.
+  if (rows && rows.Tags) {
+    const tags = rows.Tags.split(",").map((t) => t.trim()).filter(Boolean);
+    if (!tags.length) errors.push(`${name}: metadata Tags row is empty`);
+    for (const tag of tags) {
+      const m = /^slalomair:([a-z][a-z-]*)\/[a-z0-9][a-z0-9-]*$/.exec(tag);
+      if (!m) {
+        errors.push(`${name}: tag "${tag}" is not a slalomair:<facet>/<value> id`);
+      } else if (!KNOWN_TAG_FACETS.includes(m[1])) {
+        errors.push(`${name}: tag "${tag}" uses unknown facet "${m[1]}" (known: ${KNOWN_TAG_FACETS.join(", ")})`);
       }
     }
   }

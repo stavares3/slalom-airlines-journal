@@ -86,3 +86,30 @@ export function initDataLayer(pageMeta = {}) {
   stub().push({ user: { ...ANONYMOUS_USER } });
   pushEvent('page:loaded', { pageName: page.pageName, template: page.template });
 }
+
+/**
+ * Registers a decorated block with the data layer: a component entry in the
+ * dictionary section 1.6 map shape, then the paired cmp:show event. The
+ * flagship prototype defers this pair behind a 40 percent
+ * IntersectionObserver; the Journal pushes at decoration time instead (its
+ * blocks already decorate lazily, section by section, and it has no
+ * below-the-fold rails worth gating). Documented in the dictionary's Journal
+ * appendix, section 1.1a. Every Journal block calls this, header and footer
+ * included, so each block registers exactly once per page view.
+ * @param {Element} element the block element; gains the id (defaults to type)
+ *   and the data-cmp marker, mirroring the flagship's markup convention
+ * @param {string} type the block name, e.g. "hero"
+ * @param {string} title human label for this component instance
+ */
+export function registerComponent(element, type, title = '') {
+  if (!element.id) element.id = type;
+  element.dataset.cmp = type;
+  if (title) element.dataset.cmpTitle = title;
+  const { id } = element;
+  stub().push({
+    component: {
+      [id]: { '@type': `slalomair/components/${type}`, title },
+    },
+  });
+  pushEvent('cmp:show', { id, type });
+}
