@@ -58,7 +58,7 @@ Shared payload: `{ mediaType: "audio"|"video", mediaId, title, duration, positio
 
 ## Podcast audio
 
-The two episodes are **synthesized demo narration** and are labeled as such on the player and in each article's Narration metadata row. Each was generated from the committed script beside it (`media/<slug>-narration.md`) with Windows SAPI text to speech (System.Speech; David for `electric-quiet`, Zira for `crew-first-day`, rate -1) and converted from wav to mp3 with ffmpeg (`-codec:a libmp3lame -q:a 4`). Both run 83 to 84 seconds. To regenerate, re-run that pipeline against the narration script; keep the label.
+The two episodes are **synthesized demo narration** and are labeled as such on the player and in each article's Narration metadata row. Each was generated from the committed script beside it (`media/<slug>-narration.md`) with Microsoft neural TTS (edge voices AndrewMultilingual and EmmaMultilingual; previously Windows SAPI text to speech (System.Speech; David for `electric-quiet`, Zira for `crew-first-day`, rate -1) and converted from wav to mp3 with ffmpeg (`-codec:a libmp3lame -q:a 4`). Both run 83 to 84 seconds. To regenerate, re-run that pipeline against the narration script; keep the label.
 
 ## Media provenance
 
