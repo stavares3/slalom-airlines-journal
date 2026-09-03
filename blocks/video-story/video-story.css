@@ -1,0 +1,139 @@
+/* Journal video story: a full-width film frame on midnight, poster at rest
+   with one centered play control, caption and fullscreen affordance on the
+   bar below. Nothing in this block moves until the visitor asks it to. */
+
+main .video-story {
+  margin: var(--space-4) 0;
+}
+
+main .video-story .video-story-frame {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-space);
+  box-shadow: var(--shadow-soft);
+}
+
+main .video-story video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+main .video-story .video-story-play {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background-color: rgba(6, 13, 31, .35);
+  color: var(--color-ivory);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out-expo);
+}
+
+main .video-story .video-story-play:hover,
+main .video-story .video-story-play:focus-visible {
+  background-color: rgba(6, 13, 31, .5);
+}
+
+main .video-story .video-story-play:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+}
+
+main .video-story .video-story-play-glyph {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+main .video-story .video-story-play-glyph::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: .7rem 0 .7rem 1.2rem;
+  border-color: transparent transparent transparent var(--color-midnight);
+  margin-left: .2rem;
+}
+
+main .video-story .video-story-play-text {
+  font-size: var(--text-sm);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+/* playing state: the overlay leaves, native controls take over */
+main .video-story:not(.video-story-idle) .video-story-play {
+  display: none;
+}
+
+main .video-story .video-story-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+main .video-story .video-story-caption {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted-color);
+}
+
+main .video-story .video-story-fullscreen {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--rule-color);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: var(--text-xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .35rem .8rem;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out-expo);
+}
+
+main .video-story .video-story-fullscreen:hover,
+main .video-story .video-story-fullscreen:focus-visible {
+  border-color: var(--color-slalom-blue);
+}
+
+main .video-story .video-story-fullscreen:focus-visible {
+  outline: 2px solid var(--color-slalom-blue);
+  outline-offset: 2px;
+}
+
+main .video-story .video-story-fullscreen-glyph {
+  display: block;
+  width: .8rem;
+  height: .8rem;
+  border: 2px solid currentcolor;
+  border-radius: 2px;
+  /* corner brackets: mask away the middles of each edge */
+  mask: linear-gradient(#000, #000) top left / .25rem .25rem no-repeat,
+    linear-gradient(#000, #000) top right / .25rem .25rem no-repeat,
+    linear-gradient(#000, #000) bottom left / .25rem .25rem no-repeat,
+    linear-gradient(#000, #000) bottom right / .25rem .25rem no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main .video-story .video-story-play,
+  main .video-story .video-story-fullscreen {
+    transition: none;
+  }
+}

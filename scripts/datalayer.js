@@ -15,8 +15,8 @@
  *   initDataLayer(pageMeta)  seeds page + user, then fires page:loaded
  *   pushEvent(name, payload) pushes { event: name, eventInfo: payload }
  *
- * The media:* helpers land in task E4-2 alongside podcast-player and
- * video-story.
+ * The media:* helper (task E4-2) is attachMediaTracking below, consumed by
+ * the podcast-player and video-story blocks.
  */
 
 /** Ensures the array stub exists and returns it. */
@@ -112,4 +112,72 @@ export function registerComponent(element, type, title = '') {
     },
   });
   pushEvent('cmp:show', { id, type });
+}
+
+/* ------------------------------------------------------------------ */
+/* media:* events (task E4-2, dictionary section 2 Journal rows)       */
+/* ------------------------------------------------------------------ */
+
+/** Progress milestones, in percent of duration, each fired at most once. */
+const MILESTONES = [25, 50, 75];
+
+/**
+ * Wires the four Journal media events onto an audio or video element.
+ * Contract (dictionary section 2, Journal-only rows):
+ *   media:start     first successful playback start, once per page view
+ *   media:pause     visitor pauses playback (never the automatic pause the
+ *                   browser fires at the end of the media; that moment
+ *                   belongs to media:complete)
+ *   media:progress  the playhead crosses 25, 50, 75 percent of duration,
+ *                   each milestone once per page view, whether reached by
+ *                   playback or by seeking; payload adds { milestone }
+ *   media:complete  playback reaches the end, once per page view
+ * Every payload carries { mediaType, mediaId, title, duration, position }
+ * with duration and position in whole seconds.
+ *
+ * mediaId is the host article's slug: the Journal's media is one piece per
+ * article document, so the document name is the media identity even when
+ * the underlying file is shared footage (see eds-blog/README.md).
+ *
+ * @param {HTMLMediaElement} media the audio or video element
+ * @param {object} info { mediaType: "audio"|"video", mediaId, title }
+ */
+export function attachMediaTracking(media, { mediaType, mediaId, title }) {
+  const fired = new Set();
+  const seconds = (value) => (Number.isFinite(value) ? Math.round(value) : 0);
+  const payload = (position) => ({
+    mediaType,
+    mediaId,
+    title,
+    duration: seconds(media.duration),
+    position: seconds(position),
+  });
+
+  media.addEventListener('playing', () => {
+    if (fired.has('start')) return;
+    fired.add('start');
+    pushEvent('media:start', payload(media.currentTime));
+  });
+
+  media.addEventListener('pause', () => {
+    if (media.ended) return;
+    pushEvent('media:pause', payload(media.currentTime));
+  });
+
+  media.addEventListener('timeupdate', () => {
+    if (!Number.isFinite(media.duration) || media.duration <= 0) return;
+    const pct = (media.currentTime / media.duration) * 100;
+    MILESTONES.forEach((milestone) => {
+      if (pct >= milestone && !fired.has(milestone)) {
+        fired.add(milestone);
+        pushEvent('media:progress', { ...payload(media.currentTime), milestone });
+      }
+    });
+  });
+
+  media.addEventListener('ended', () => {
+    if (fired.has('complete')) return;
+    fired.add('complete');
+    pushEvent('media:complete', payload(media.duration));
+  });
 }

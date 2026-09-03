@@ -1,0 +1,121 @@
+/* Journal podcast player: a midnight plate with the play control on the
+   left and the seek rail beside it. The one accent is ice cyan; no
+   gradients (the masthead swoosh keeps that moment). */
+
+main .podcast-player {
+  background-color: var(--color-midnight);
+  color: var(--color-ivory);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+  box-shadow: var(--shadow-soft);
+}
+
+main .podcast-player .podcast-player-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+main .podcast-player .podcast-player-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+main .podcast-player .podcast-player-label {
+  margin: 0;
+  font-size: var(--text-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+
+main .podcast-player .podcast-player-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+main .podcast-player .podcast-player-toggle {
+  flex: 0 0 auto;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: var(--color-midnight);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out-expo);
+}
+
+main .podcast-player .podcast-player-toggle:hover,
+main .podcast-player .podcast-player-toggle:focus-visible {
+  background-color: var(--color-accent-bright);
+}
+
+main .podcast-player .podcast-player-toggle:focus-visible {
+  outline: 2px solid var(--color-ivory);
+  outline-offset: 2px;
+}
+
+/* the glyph is pure CSS: a triangle at rest, two bars while playing */
+main .podcast-player .podcast-player-glyph {
+  display: block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: .55rem 0 .55rem .95rem;
+  border-color: transparent transparent transparent currentcolor;
+  margin-left: .15rem;
+}
+
+main .podcast-player.podcast-player-playing .podcast-player-glyph {
+  width: .9rem;
+  height: 1.05rem;
+  border: 0;
+  margin-left: 0;
+  background:
+    linear-gradient(currentcolor, currentcolor) left / .3rem 100% no-repeat,
+    linear-gradient(currentcolor, currentcolor) right / .3rem 100% no-repeat;
+}
+
+main .podcast-player .podcast-player-rail {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+main .podcast-player .podcast-player-scrubber {
+  width: 100%;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+main .podcast-player .podcast-player-scrubber:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+main .podcast-player .podcast-player-time {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-mist);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  gap: var(--space-1);
+}
+
+main .podcast-player .podcast-player-elapsed {
+  color: var(--color-ivory);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main .podcast-player .podcast-player-toggle {
+    transition: none;
+  }
+}

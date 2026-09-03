@@ -16,7 +16,13 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const EXPECTED = { blocks: 5, articles: 1 };
+const EXPECTED = { blocks: 7, articles: 1 };
+
+// Article Template row values and the media block each one must embed
+// (task E4-2): podcast pages carry the podcast player, film pages carry the
+// video story, plain stories carry neither requirement.
+const ARTICLE_TEMPLATES = ["article", "podcast", "film"];
+const TEMPLATE_BLOCKS = { podcast: "podcast-player", film: "video-story" };
 
 // Brand guardrails, mirrored from prototype/scripts/verify.mjs so the same
 // retired names and copy rules bind both sites.
@@ -118,6 +124,13 @@ for (const doc of contentDocs) {
       if (rows.Date && !/^\d{4}-\d{2}-\d{2}$/.test(rows.Date)) {
         errors.push(`${name}: metadata Date "${rows.Date}" is not an ISO date`);
       }
+      if (rows.Template && !ARTICLE_TEMPLATES.includes(rows.Template)) {
+        errors.push(`${name}: metadata Template "${rows.Template}" is not one of ${ARTICLE_TEMPLATES.join("|")}`);
+      }
+      const requiredBlock = rows.Template && TEMPLATE_BLOCKS[rows.Template];
+      if (requiredBlock && !html.includes(`class="${requiredBlock}"`)) {
+        errors.push(`${name}: Template ${rows.Template} requires a ${requiredBlock} block in the document`);
+      }
     }
   }
 
@@ -155,10 +168,11 @@ const readerFiles = [
   ...walk(path.join(ROOT, "blocks")),
   ...walk(path.join(ROOT, "styles")),
   ...walk(path.join(ROOT, "scripts")),
+  ...walk(path.join(ROOT, "media"), ".md"), // podcast narration scripts
   path.join(ROOT, "head.html"),
   path.join(ROOT, "404.html"),
   path.join(ROOT, "fstab.yaml"),
-].filter((p) => existsSync(p) && /\.(html|json|js|mjs|css|yaml)$/.test(p));
+].filter((p) => existsSync(p) && /\.(html|json|js|mjs|css|yaml|md)$/.test(p));
 
 for (const p of readerFiles) {
   const text = read(p);
