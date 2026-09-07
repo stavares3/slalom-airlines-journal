@@ -30,10 +30,12 @@
   /* Typography */
   --font-display: "Fraunces Variable", fraunces-fallback, Georgia, serif;
   --font-sans: "Inter Variable", inter-fallback, "Segoe UI", system-ui, sans-serif;
+  --text-2xs: .7rem;
   --text-xs: .78rem;
   --text-sm: .9rem;
   --text-md: 1rem;
   --text-lg: 1.18rem;
+  --display-sm: clamp(1.35rem, 1.15rem + .8vw, 1.7rem);
   --display-md: clamp(1.6rem, 1.1rem + 2vw, 2.6rem);
   --display-lg: clamp(2.2rem, 1.4rem + 3.4vw, 4rem);
   --display-xl: clamp(2.8rem, 1.6rem + 5vw, 5.6rem);
@@ -155,7 +157,7 @@ blockquote {
   padding: var(--space-2) var(--space-4);
   border-left: 3px solid var(--color-accent);
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: var(--display-sm);
   line-height: 1.45;
   color: var(--color-ivory);
 }

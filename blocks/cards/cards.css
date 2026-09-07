@@ -75,7 +75,7 @@ main .cards .cards-card-eyebrow {
 
 main .cards .cards-card-title {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: var(--display-sm);
   line-height: 1.2;
 }
 
