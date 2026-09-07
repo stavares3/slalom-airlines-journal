@@ -3,7 +3,8 @@
    gradients (the masthead swoosh keeps that moment). */
 
 main .podcast-player {
-  background-color: var(--color-midnight);
+  background-color: var(--plate-color);
+  border: 1px solid var(--rule-color);
   color: var(--color-ivory);
   border-radius: var(--radius-md);
   padding: var(--space-4);

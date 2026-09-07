@@ -1,9 +1,9 @@
 /*
  * Slalom Airlines Journal, base styles (Phase 4, task E4-0).
  * Token custom properties ported from prototype/src/styles/tokens.css.
- * Spectrum stops are used as solid accents only; the single gradient token
- * kept here (--grad-horizon) is reserved for the masthead swoosh, the one
- * gradient moment the brand system allows the Journal.
+ * Spectrum stops are used as solid accents only; the gradient token
+ * (--grad-horizon) is kept for parity with the prototype's tokens and is
+ * unused since the masthead took the tail-fin logo.
  * Structure follows the aem-boilerplate styles.css shape (body.appear gate,
  * block visibility gates, section rhythm, button grammar).
  */
@@ -59,14 +59,17 @@
   --container: 76rem;
   --header-h: 4.5rem;
 
-  /* Journal surface: the editorial side of the brand reads as ivory paper
-     with ink type, against the flagship site's midnight product surfaces. */
-  --background-color: var(--color-ivory);
-  --text-color: var(--color-ink);
-  --muted-color: #5A6478;
-  --rule-color: rgba(19, 23, 34, .14);
-  --link-color: var(--color-slalom-blue);
-  --link-hover-color: #0A4FC9;
+  /* Journal surface: the same midnight ground as the flagship site, so the
+     editorial pages and the product pages read as one brand (2026-09-07,
+     the ivory paper surface retired on review). Plates sit one step lighter
+     on navy, rules and muted type come from the glacier and mist stops. */
+  --background-color: var(--color-space);
+  --text-color: var(--color-ivory);
+  --muted-color: var(--color-mist);
+  --rule-color: rgba(127, 183, 217, .18);
+  --plate-color: var(--color-navy-800);
+  --link-color: var(--color-accent);
+  --link-hover-color: var(--color-accent-bright);
 }
 
 /* Metric-compatible fallbacks so text does not shift when the woff2 arrive */
@@ -122,8 +125,8 @@ h6 {
   font-weight: 560;
   line-height: 1.14;
   letter-spacing: -.01em;
-  color: var(--color-midnight);
   scroll-margin: calc(var(--header-h) + var(--space-3));
+  color: var(--color-ivory);
 }
 
 h1 {
@@ -154,7 +157,7 @@ blockquote {
   font-family: var(--font-display);
   font-size: 1.3rem;
   line-height: 1.45;
-  color: var(--color-navy-700);
+  color: var(--color-ivory);
 }
 
 code,
@@ -165,7 +168,7 @@ pre {
 code {
   padding: .1em .35em;
   border-radius: var(--radius-sm);
-  background-color: rgba(16, 30, 60, .08);
+  background-color: rgba(127, 183, 217, .14);
 }
 
 pre {
@@ -206,7 +209,7 @@ a:hover {
 }
 
 a:focus-visible {
-  outline: 2px solid var(--color-slalom-blue);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -248,41 +251,42 @@ button.button:disabled {
 
 a.button.primary,
 button.button.primary {
-  border-color: var(--color-midnight);
-  background-color: var(--color-midnight);
-  color: var(--color-ivory);
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-space);
 }
 
 a.button.primary:hover,
 a.button.primary:focus-visible,
 button.button.primary:hover,
 button.button.primary:focus-visible {
-  border-color: var(--color-navy-700);
-  background-color: var(--color-navy-700);
-  color: var(--color-ivory);
+  border-color: var(--color-accent-bright);
+  background-color: var(--color-accent-bright);
+  color: var(--color-space);
   text-decoration: none;
 }
 
 a.button.secondary,
 button.button.secondary {
-  border-color: var(--color-midnight);
+  border-color: rgba(247, 244, 238, .35);
   background-color: transparent;
-  color: var(--color-midnight);
+  color: var(--color-ivory);
 }
 
 a.button.secondary:hover,
 a.button.secondary:focus-visible,
 button.button.secondary:hover,
 button.button.secondary:focus-visible {
-  background-color: rgba(10, 20, 40, .08);
+  border-color: var(--color-ivory);
+  background-color: rgba(247, 244, 238, .08);
   text-decoration: none;
 }
 
 a.button.accent,
 button.button.accent {
-  border-color: var(--color-slalom-blue);
-  background-color: var(--color-slalom-blue);
-  color: #FFFFFF;
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-space);
 }
 
 a.button.accent:hover,
@@ -345,7 +349,7 @@ main .default-content-wrapper p {
 /* section metadata styles */
 main .section.light,
 main .section.highlight {
-  background-color: #FFFFFF;
+  background-color: var(--plate-color);
   margin: 0;
   padding: var(--space-5) 0;
 }

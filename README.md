@@ -39,6 +39,10 @@ A document is a `<body>` with `<header></header>`, `<main>` holding section `<di
 
 **Deploy path.** At deploy time the documents move to a real da.live org (or a Drive/SharePoint mountpoint) via `aem content push`, `fstab.yaml` gets the real mountpoint, and the code side goes to a GitHub repository with the AEM Code Sync app so aem.page/aem.live builds serve it. The blocks, scripts, and styles need no changes; the hand maintained `query-index.json` is replaced by the platform's generated index (the cards block already fetches it by relative URL). The flagship site links here already: the header nav, the footer and the home page's From the Journal cards read `content/query-index.json` at build time and point at `SLAIR_JOURNAL_URL` (default `http://localhost:3000`, the `aem up` preview), so deployment is a build-time variable, not a code change.
 
+## Surface
+
+The Journal renders on the flagship site's midnight ground (2026-09-07; the original ivory paper surface was retired on review so the two sites read as one brand). Everything is driven by the tokens at the top of `styles/styles.css`: `--background-color`, `--text-color`, `--muted-color`, `--rule-color`, `--plate-color` and the link colors. The masthead's last item returns to the flagship site; set `window.SLAIR_SITE_URL` before `scripts.js` in a deployed `head.html` to point it at the real origin (default: the local author).
+
 ## Blocks (7)
 
 `header`, `footer`, `hero`, `cards`, `article-header`, `podcast-player`, `video-story`. Every block registers itself on the Adobe Client Data Layer at decoration (`registerComponent`: a section 1.6 component entry plus `cmp:show`), per the dictionary's Journal appendix (`docs/architecture/data-layer-dictionary.md` section 1.1a).

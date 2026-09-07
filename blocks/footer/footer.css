@@ -4,6 +4,7 @@ footer .footer {
   margin-top: var(--space-6);
   background-color: var(--color-midnight);
   color: var(--color-ivory);
+  border-top: 1px solid var(--rule-color);
 }
 
 footer .footer-inner {

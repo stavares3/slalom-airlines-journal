@@ -110,11 +110,11 @@ main .video-story .video-story-fullscreen {
 
 main .video-story .video-story-fullscreen:hover,
 main .video-story .video-story-fullscreen:focus-visible {
-  border-color: var(--color-slalom-blue);
+  border-color: var(--color-accent);
 }
 
 main .video-story .video-story-fullscreen:focus-visible {
-  outline: 2px solid var(--color-slalom-blue);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 

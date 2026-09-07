@@ -22,7 +22,7 @@ main .article-header .article-header-meta {
 
 main .article-header .article-header-byline {
   font-weight: 620;
-  color: var(--color-navy-700);
+  color: var(--color-glacier);
 }
 
 main .article-header .article-header-dot {
@@ -47,6 +47,6 @@ main .article-header .article-header-tag {
   font-weight: 620;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--color-navy-700);
-  background-color: #FFFFFF;
+  color: var(--color-glacier);
+  background-color: var(--plate-color);
 }

@@ -1,5 +1,5 @@
-/* Journal cards: white article plates on the ivory page, one column on a
-   phone, filling columns as the viewport allows. */
+/* Journal cards: navy plates on the midnight page, one column on a phone,
+   filling columns as the viewport allows. */
 
 main .cards .cards-list {
   list-style: none;
@@ -21,7 +21,7 @@ main .cards .cards-card-link {
   overflow: hidden;
   border: 1px solid var(--rule-color);
   border-radius: var(--radius-md);
-  background-color: #FFFFFF;
+  background-color: var(--plate-color);
   color: var(--text-color);
   text-decoration: none;
   transition: box-shadow var(--dur-fast) var(--ease-out-expo), transform var(--dur-fast) var(--ease-out-expo);
@@ -31,6 +31,7 @@ main .cards .cards-card-link:hover,
 main .cards .cards-card-link:focus-visible {
   color: var(--text-color);
   text-decoration: none;
+  border-color: rgba(79, 201, 232, .35);
   box-shadow: var(--shadow-soft);
   transform: translateY(-2px);
 }
@@ -69,7 +70,7 @@ main .cards .cards-card-eyebrow {
   font-weight: 640;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--color-slalom-blue);
+  color: var(--color-accent);
 }
 
 main .cards .cards-card-title {
@@ -79,7 +80,7 @@ main .cards .cards-card-title {
 }
 
 main .cards .cards-card-link:hover .cards-card-title {
-  color: var(--color-slalom-blue);
+  color: var(--color-accent-bright);
 }
 
 main .cards .cards-card-description {
