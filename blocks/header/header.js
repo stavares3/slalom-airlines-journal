@@ -4,19 +4,18 @@
  * means one less content fetch and nothing that can miss into the proxy.
  *
  * The wordmark links to the Journal's own home ("/"); the last nav item,
- * "Slalom Airlines", returns to the flagship site. That origin is the one
- * environment-specific value here: window.SLAIR_SITE_URL when a deployment
- * sets it (head.html or a script before this one), else the local author.
+ * "Slalom Airlines", returns to the flagship site through scripts/site-links.js
+ * (window.SLAIR_SITE_URL in a deployed head.html, else the local author).
  */
 
 import { registerComponent } from '../../scripts/datalayer.js';
+import { siteUrl } from '../../scripts/site-links.js';
 
 const SECTIONS = [
   ['Stories', '/#stories'],
   ['Podcasts', '/#podcasts'],
   ['Films', '/#films'],
 ];
-const SITE_URL = window.SLAIR_SITE_URL || 'http://localhost:4502/content/slalomair/us/en.html?wcmmode=disabled';
 
 // The site's tail-fin mark (three livery bands up the fin) beside the
 // wordmark, the same drawing the flagship header uses; JOURNAL takes the
@@ -62,7 +61,7 @@ export default async function decorate(block) {
   });
   const site = el('li');
   const siteLink = el('a', 'header-nav-link header-nav-link-site', 'Slalom Airlines');
-  siteLink.href = SITE_URL;
+  siteLink.href = siteUrl('');
   siteLink.setAttribute('aria-label', 'Back to the Slalom Airlines site');
   site.append(siteLink);
   list.append(site);

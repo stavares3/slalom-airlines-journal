@@ -47,6 +47,14 @@ The Journal renders on the flagship site's midnight ground (2026-09-07; the orig
 
 `header`, `footer`, `hero`, `cards`, `article-header`, `podcast-player`, `video-story`. Every block registers itself on the Adobe Client Data Layer at decoration (`registerComponent`: a section 1.6 component entry plus `cmp:show`), per the dictionary's Journal appendix (`docs/architecture/data-layer-dictionary.md` section 1.1a).
 
+## Web SDK bridge (CJA)
+
+`scripts/edge-bridge.js` turns the data layer into XDM ExperienceEvents on the flagship datastream: the page view, `cmp:show`, `cmp:click` and the four `media:*` events, `eventType` `slalomair.<event>` with the payload under `_slalomair`, the same mapping the site uses. Set `slair-datastream-id`, `slair-org-id`, optionally `slair-edge-domain`, and `slair-alloy-src` (the Web SDK library URL your organization standardizes on, or a self-hosted copy) in `head.html` for a deployed Journal; with them empty, as in the repo, nothing third-party loads and every record goes to the edge simulator (`window.slairEdge.sent`, and `console.debug("[slair edge-sim]")`) so a demo can show the exact payloads. The CJA metrics built on these are in `docs/architecture/cja-data-views.md` section 2.2.
+
+## Film call to action
+
+A film whose document carries a `slalomair:destination/<code>` tag ends on "Book your trip to <city> now" over the brand end card (the `video-story` block reveals it during the card's last seconds, or at the end). The button deep-links the site's booking card with the destination preselected (`/book?dest=<code>&origin=SEA`); "Watch again" restarts the film. Tracking: component `video-story-cta` with `cmp:show` on first appearance and `cmp:click { action: "book" | "replay", destination, mediaId, position }` per press.
+
 ## media:* events
 
 The two media blocks wire `attachMediaTracking` from `scripts/datalayer.js` onto their audio or video element. Contract (dictionary section 2, Journal-only rows, all Live):

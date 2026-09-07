@@ -72,6 +72,74 @@ main .video-story .video-story-play-text {
   text-transform: uppercase;
 }
 
+/* end-of-film call to action, over the brand end card */
+main .video-story .video-story-cta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(6, 13, 31, .86);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  animation: video-story-cta-in .5s ease-out;
+}
+
+@keyframes video-story-cta-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+main .video-story .video-story-cta[hidden] {
+  display: none;
+}
+
+main .video-story .video-story-cta-panel {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  max-width: 34rem;
+}
+
+main .video-story .video-story-cta-eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+main .video-story .video-story-cta-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--display-md);
+  font-weight: 560;
+  line-height: 1.1;
+  color: var(--color-ivory);
+}
+
+main .video-story .video-story-cta-text {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-mist);
+}
+
+main .video-story .video-story-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+@media (width < 600px) {
+  main .video-story .video-story-cta { padding-bottom: 3rem; }
+  main .video-story .video-story-cta-text { display: none; }
+}
+
 /* playing state: the overlay leaves, native controls take over */
 main .video-story:not(.video-story-idle) .video-story-play {
   display: none;

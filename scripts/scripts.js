@@ -26,6 +26,7 @@ import {
   getMetadata,
 } from './aem.js';
 import { initDataLayer } from './datalayer.js';
+import { initEdgeBridge, connectEdge } from './edge-bridge.js';
 
 /**
  * load fonts.css and set a session storage flag
@@ -132,6 +133,7 @@ function bootDataLayer() {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   bootDataLayer();
+  initEdgeBridge();
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
@@ -172,11 +174,13 @@ async function loadLazy(doc) {
 
 /**
  * Loads everything that happens a lot later, without impacting the user
- * experience. Nothing runs here in E4-0; media analytics helpers arrive with
+ * experience. The edge bridge connects here; media analytics helpers arrive with
  * the player blocks and stay local either way.
  */
 function loadDelayed() {
-  // intentionally empty
+  // The Web SDK connection (or the local edge simulator) attaches here, after
+  // LCP and the lazy sections; everything queued since loadEager flushes then.
+  connectEdge();
 }
 
 async function loadPage() {

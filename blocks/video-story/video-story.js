@@ -8,13 +8,26 @@
  * fullscreen affordance sits with the caption from the start.
  *
  * media:* events ride scripts/datalayer.js's attachMediaTracking, with
- * mediaId = the host article's slug (the footage file may be shared DAM
- * stock; the article is the media identity). All metadata-derived text
- * lands via textContent.
+ * mediaId = the host article's slug (the article is the media identity), and
+ * the edge bridge forwards them to the datastream as slalomair.media.*.
+ * A film tagged with a destination ends on a booking call to action over
+ * its brand end card, tracked as the video-cta component. All
+ * metadata-derived text lands via textContent.
  */
 
 import { getMetadata } from '../../scripts/aem.js';
-import { registerComponent, attachMediaTracking } from '../../scripts/datalayer.js';
+import { registerComponent, attachMediaTracking, pushEvent } from '../../scripts/datalayer.js';
+import { siteUrl } from '../../scripts/site-links.js';
+
+/* Destination the film sells, from the document's slalomair:destination tag. */
+const CITIES = { nrt: 'Tokyo', lhr: 'London', cdg: 'Paris', hnl: 'Honolulu', syd: 'Sydney', jfk: 'New York', den: 'Denver', sea: 'Seattle' };
+const END_CARD_SECONDS = 3.8; // the brand end card appended to every Journal film
+
+function destinationFromTags() {
+  const tag = getMetadata('article:tag').split(',').map((t) => t.trim()).find((t) => t.startsWith('slalomair:destination/'));
+  const code = tag ? tag.split('/').pop().toLowerCase() : '';
+  return code && CITIES[code] ? { code: code.toUpperCase(), city: CITIES[code] } : null;
+}
 
 /** The host document's slug, the media identity for this page's piece. */
 function pageSlug() {
@@ -91,5 +104,58 @@ export default function decorate(block) {
 
   attachMediaTracking(video, { mediaType: 'video', mediaId: pageSlug(), title });
 
-  registerComponent(block, 'video-story', title);
+  registerComponent(block, 'video-story', title, { onVisible: true });
+
+  // Call to action over the end card: "Book your trip to <city> now", shown
+  // when the film reaches its brand card (or ends), hidden again on replay.
+  // Tracked as its own component: a cmp:show the first time it appears and a
+  // cmp:click per press, both carrying the destination and the film's id.
+  const destination = destinationFromTags();
+  if (destination) {
+    const mediaId = pageSlug();
+    const ctaId = `${block.id || 'video-story'}-cta`;
+    const cta = el('div', 'video-story-cta');
+    cta.id = ctaId;
+    cta.hidden = true;
+    cta.dataset.cmp = 'video-cta';
+    cta.dataset.cmpTitle = `Book your trip to ${destination.city} now`;
+    const panel = el('div', 'video-story-cta-panel');
+    panel.append(el('span', 'video-story-cta-eyebrow', 'Slalom Airlines'));
+    panel.append(el('p', 'video-story-cta-title', `Book your trip to ${destination.city} now`));
+    panel.append(el('p', 'video-story-cta-text', `Nonstop from Seattle. Every fare held free for 24 hours.`));
+    const actions = el('div', 'video-story-cta-actions');
+    const book = el('a', 'button primary video-story-cta-book', `Book Seattle to ${destination.city}`);
+    book.href = siteUrl('/book', { dest: destination.code, origin: 'SEA' });
+    const replay = el('button', 'button secondary video-story-cta-replay', 'Watch again');
+    replay.type = 'button';
+    actions.append(book, replay);
+    panel.append(actions);
+    cta.append(panel);
+    frame.append(cta);
+
+    let shown = false;
+    const reveal = () => {
+      if (!cta.hidden) return;
+      cta.hidden = false;
+      if (!shown) {
+        shown = true;
+        window.adobeDataLayer.push({ component: { [ctaId]: { '@type': 'slalomair/components/video-cta', title: cta.dataset.cmpTitle } } });
+        pushEvent('cmp:show', { id: ctaId, type: 'video-cta', destination: destination.code, mediaId });
+      }
+    };
+    video.addEventListener('timeupdate', () => {
+      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - END_CARD_SECONDS) reveal();
+    });
+    video.addEventListener('ended', reveal);
+    video.addEventListener('seeking', () => { if (video.currentTime < video.duration - END_CARD_SECONDS) cta.hidden = true; });
+    book.addEventListener('click', () => {
+      pushEvent('cmp:click', { id: ctaId, type: 'video-cta', action: 'book', destination: destination.code, mediaId, position: Math.round(video.currentTime) });
+    });
+    replay.addEventListener('click', () => {
+      pushEvent('cmp:click', { id: ctaId, type: 'video-cta', action: 'replay', destination: destination.code, mediaId });
+      cta.hidden = true;
+      video.currentTime = 0;
+      video.play();
+    });
+  }
 }

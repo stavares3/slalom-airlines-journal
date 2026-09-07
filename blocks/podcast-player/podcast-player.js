@@ -123,5 +123,5 @@ export default function decorate(block) {
 
   attachMediaTracking(audio, { mediaType: 'audio', mediaId: pageSlug(), title });
 
-  registerComponent(block, 'podcast-player', title);
+  registerComponent(block, 'podcast-player', title, { onVisible: true });
 }

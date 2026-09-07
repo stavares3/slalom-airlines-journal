@@ -101,7 +101,7 @@ export function initDataLayer(pageMeta = {}) {
  * @param {string} type the block name, e.g. "hero"
  * @param {string} title human label for this component instance
  */
-export function registerComponent(element, type, title = '') {
+export function registerComponent(element, type, title = '', { onVisible = false } = {}) {
   if (!element.id) element.id = type;
   element.dataset.cmp = type;
   if (title) element.dataset.cmpTitle = title;
@@ -111,7 +111,17 @@ export function registerComponent(element, type, title = '') {
       [id]: { '@type': `slalomair/components/${type}`, title },
     },
   });
-  pushEvent('cmp:show', { id, type });
+  const show = () => pushEvent('cmp:show', { id, type });
+  // Media blocks answer "did they see it": their cmp:show waits until 40% of
+  // the player is in the viewport (the flagship's threshold), once per page view.
+  if (onVisible && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); show(); }
+    }, { threshold: 0.4 });
+    io.observe(element);
+    return;
+  }
+  show();
 }
 
 /* ------------------------------------------------------------------ */
@@ -132,8 +142,10 @@ const MILESTONES = [25, 50, 75];
  *                   each milestone once per page view, whether reached by
  *                   playback or by seeking; payload adds { milestone }
  *   media:complete  playback reaches the end, once per page view
- * Every payload carries { mediaType, mediaId, title, duration, position }
- * with duration and position in whole seconds.
+ *   media:unload    the visitor leaves (tab hidden or page unloading) after
+ *                   starting but before completing, once per page view
+ * Every payload carries { mediaType, mediaId, title, duration, position,
+ * watchedSeconds, maxPosition, percentWatched } with times in whole seconds.
  *
  * mediaId is the host article's slug: the Journal's media is one piece per
  * article document, so the document name is the media identity even when
@@ -145,12 +157,23 @@ const MILESTONES = [25, 50, 75];
 export function attachMediaTracking(media, { mediaType, mediaId, title }) {
   const fired = new Set();
   const seconds = (value) => (Number.isFinite(value) ? Math.round(value) : 0);
+  // Engagement totals, per page view: seconds actually played (timeupdate
+  // deltas while playing, seeks excluded), the furthest point reached, and
+  // that point as a percent of duration. Every payload carries them, so
+  // "how long" and "how much" are answered on the last event a visitor
+  // fires, whichever it is.
+  let watched = 0;
+  let maxPosition = 0;
+  let lastTime = null;
   const payload = (position) => ({
     mediaType,
     mediaId,
     title,
     duration: seconds(media.duration),
     position: seconds(position),
+    watchedSeconds: seconds(watched),
+    maxPosition: seconds(maxPosition),
+    percentWatched: Number.isFinite(media.duration) && media.duration > 0 ? Math.min(100, Math.round((maxPosition / media.duration) * 100)) : 0,
   });
 
   media.addEventListener('playing', () => {
@@ -164,7 +187,16 @@ export function attachMediaTracking(media, { mediaType, mediaId, title }) {
     pushEvent('media:pause', payload(media.currentTime));
   });
 
+  media.addEventListener('seeking', () => { lastTime = null; });
   media.addEventListener('timeupdate', () => {
+    if (!media.paused && !media.seeking) {
+      if (lastTime !== null) {
+        const delta = media.currentTime - lastTime;
+        if (delta > 0 && delta < 1.5) watched += delta;
+      }
+      lastTime = media.currentTime;
+    }
+    if (media.currentTime > maxPosition) maxPosition = media.currentTime;
     if (!Number.isFinite(media.duration) || media.duration <= 0) return;
     const pct = (media.currentTime / media.duration) * 100;
     MILESTONES.forEach((milestone) => {
@@ -178,6 +210,17 @@ export function attachMediaTracking(media, { mediaType, mediaId, title }) {
   media.addEventListener('ended', () => {
     if (fired.has('complete')) return;
     fired.add('complete');
+    maxPosition = media.duration;
     pushEvent('media:complete', payload(media.duration));
   });
+
+  // media:unload: the visitor leaves (tab hidden or page unloading) after
+  // starting but before completing, once per page view, with the totals.
+  const unload = () => {
+    if (!fired.has('start') || fired.has('complete') || fired.has('unload')) return;
+    fired.add('unload');
+    pushEvent('media:unload', payload(media.currentTime));
+  };
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') unload(); });
+  window.addEventListener('pagehide', unload);
 }
