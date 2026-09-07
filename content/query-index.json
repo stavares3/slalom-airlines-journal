@@ -2,13 +2,21 @@
   "total": 6,
   "offset": 0,
   "limit": 6,
-  "columns": ["path", "title", "description", "image", "author", "date", "template"],
+  "columns": [
+    "path",
+    "title",
+    "description",
+    "image",
+    "author",
+    "date",
+    "template"
+  ],
   "data": [
     {
       "path": "/articles/night-flight-tokyo",
       "title": "Night flight to Tokyo",
       "description": "The SL 100 red-eye from Seattle to Narita, told hour by hour, with a short film shot from the cabin along the way.",
-      "image": "/media/destination-nrt.jpg",
+      "image": "/media/night-flight-tokyo-poster.jpg",
       "author": "Jonas Feld",
       "date": "2026-09-03",
       "template": "film"

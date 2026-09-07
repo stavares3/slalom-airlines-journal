@@ -58,7 +58,7 @@ The two media blocks wire `attachMediaTracking` from `scripts/datalayer.js` onto
 | `media:progress` | Playhead crosses 25, 50, 75 percent of duration, each once per page view, by playback or by seeking. Payload adds `milestone`. |
 | `media:complete` | Playback reaches the end, once per page view. |
 
-Shared payload: `{ mediaType: "audio"|"video", mediaId, title, duration, position }`, times in whole seconds. `mediaId` is the host article's slug, not the media file's basename: Journal media is one piece per article, and a film may reuse shared DAM footage under its own article identity (the shipped film plays `brand-film-loop.mp4` as article `night-flight-tokyo`).
+Shared payload: `{ mediaType: "audio"|"video", mediaId, title, duration, position }`, times in whole seconds. `mediaId` is the host article's slug, not the media file's basename: Journal media is one piece per article (the shipped film plays `night-flight-tokyo.mp4` as article `night-flight-tokyo`).
 
 ## Podcast audio
 
@@ -66,4 +66,4 @@ The two episodes are **synthesized demo narration** and are labeled as such on t
 
 ## Media provenance
 
-All imagery and footage are copies from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film's poster is `wing-clouds.jpg`; its footage is `brand-film-loop.mp4`.
+Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic) with a brand end card appended; its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
