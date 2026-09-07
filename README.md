@@ -37,7 +37,7 @@ A document is a `<body>` with `<header></header>`, `<main>` holding section `<di
 - No em or en dashes anywhere in reader files, no retired brand terms (the same bans as the prototype's verify).
 - Every `/media/...` reference must resolve to a committed file, and `content/query-index.json` (hand maintained, the local stand-in for the EDS query index service) must mirror `content/articles/` exactly.
 
-**Deploy path.** At deploy time the documents move to a real da.live org (or a Drive/SharePoint mountpoint) via `aem content push`, `fstab.yaml` gets the real mountpoint, and the code side goes to a GitHub repository with the AEM Code Sync app so aem.page/aem.live builds serve it. The blocks, scripts, and styles need no changes; the hand maintained `query-index.json` is replaced by the platform's generated index (the cards block already fetches it by relative URL). Cross-linking Journal and flagship site navigation is Phase 7 wiring.
+**Deploy path.** At deploy time the documents move to a real da.live org (or a Drive/SharePoint mountpoint) via `aem content push`, `fstab.yaml` gets the real mountpoint, and the code side goes to a GitHub repository with the AEM Code Sync app so aem.page/aem.live builds serve it. The blocks, scripts, and styles need no changes; the hand maintained `query-index.json` is replaced by the platform's generated index (the cards block already fetches it by relative URL). The flagship site links here already: the header nav, the footer and the home page's From the Journal cards read `content/query-index.json` at build time and point at `SLAIR_JOURNAL_URL` (default `http://localhost:3000`, the `aem up` preview), so deployment is a build-time variable, not a code change.
 
 ## Blocks (7)
 
