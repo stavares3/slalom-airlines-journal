@@ -1,0 +1,1 @@
+Fraunces and Inter, static TrueType builds used only by `assemble-film.py` to draw the film's title cards. Both are published under the SIL Open Font License 1.1 by their respective project authors (The Fraunces Project Authors, The Inter Project Authors). The site itself loads the variable builds from `@fontsource-variable`.

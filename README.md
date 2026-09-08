@@ -75,3 +75,5 @@ The two episodes are **synthesized demo narration** and are labeled as such on t
 ## Media provenance
 
 Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic, 30 seconds, no end card: the booking call to action is the ending); its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
+
+The film's next version is a 30 second spot cut from six Adobe Firefly clips: the production brief with the shot list, prompts, settings and title cards is `media/night-flight-tokyo-commercial.md`, and `tools/assemble-film.py` (Python 3 with `pillow` and `imageio-ffmpeg`) turns the downloaded clips into the finished file and its poster frame. The title fonts it draws with are in `tools/fonts/` under the SIL Open Font License.
