@@ -21,7 +21,9 @@ import { siteUrl } from '../../scripts/site-links.js';
 
 /* Destination the film sells, from the document's slalomair:destination tag. */
 const CITIES = { nrt: 'Tokyo', lhr: 'London', cdg: 'Paris', hnl: 'Honolulu', syd: 'Sydney', jfk: 'New York', den: 'Denver', sea: 'Seattle' };
-const END_CARD_SECONDS = 3.8; // the brand end card appended to every Journal film
+// The call to action takes over the last frame: it appears when the film ends (or within the
+// final quarter second, so the hand-off is clean on players that fire ended late).
+const CTA_LEAD_SECONDS = 0.25;
 
 function destinationFromTags() {
   const tag = getMetadata('article:tag').split(',').map((t) => t.trim()).find((t) => t.startsWith('slalomair:destination/'));
@@ -144,10 +146,10 @@ export default function decorate(block) {
       }
     };
     video.addEventListener('timeupdate', () => {
-      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - END_CARD_SECONDS) reveal();
+      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - CTA_LEAD_SECONDS) reveal();
     });
     video.addEventListener('ended', reveal);
-    video.addEventListener('seeking', () => { if (video.currentTime < video.duration - END_CARD_SECONDS) cta.hidden = true; });
+    video.addEventListener('seeking', () => { if (video.currentTime < video.duration - CTA_LEAD_SECONDS) cta.hidden = true; });
     book.addEventListener('click', () => {
       pushEvent('cmp:click', { id: ctaId, type: 'video-cta', action: 'book', destination: destination.code, mediaId, position: Math.round(video.currentTime) });
     });

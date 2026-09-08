@@ -53,7 +53,7 @@ The Journal renders on the flagship site's midnight ground (2026-09-07; the orig
 
 ## Film call to action
 
-A film whose document carries a `slalomair:destination/<code>` tag ends on "Book your trip to <city> now" over the brand end card (the `video-story` block reveals it during the card's last seconds, or at the end). The button deep-links the site's booking card with the destination preselected (`/book?dest=<code>&origin=SEA`); "Watch again" restarts the film. Tracking: component `video-story-cta` with `cmp:show` on first appearance and `cmp:click { action: "book" | "replay", destination, mediaId, position }` per press.
+A film whose document carries a `slalomair:destination/<code>` tag ends on "Book your trip to <city> now" over its last frame (the `video-story` block reveals it as the film ends). The button deep-links the site's booking card with the destination preselected (`/book?dest=<code>&origin=SEA`); "Watch again" restarts the film. Tracking: component `video-story-cta` with `cmp:show` on first appearance and `cmp:click { action: "book" | "replay", destination, mediaId, position }` per press.
 
 ## media:* events
 
@@ -74,4 +74,4 @@ The two episodes are **synthesized demo narration** and are labeled as such on t
 
 ## Media provenance
 
-Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic) with a brand end card appended; its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
+Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic, 30 seconds, no end card: the booking call to action is the ending); its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
