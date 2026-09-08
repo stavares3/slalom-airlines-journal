@@ -27,6 +27,19 @@
 #   mountpoints:
 #     /: https://content.da.live/<org>/<site>/
 #
-# No mountpoint is declared today on purpose: nothing remote is provisioned in
-# Phase 4 (preview only, no aem.live org, no Code Sync).
+# No mountpoint is declared today on purpose: nothing remote is provisioned
+# (preview only, no aem.live org, no Code Sync). The AEM team's review
+# (2026-09-08) is right that a deployed Journal keeps its documents in
+# da.live, not in this repository. The cut-over, once a da.live org exists:
+#
+#   1. aem content push  (uploads content/**/*.html unchanged)
+#   2. replace the line below with
+#        mountpoints:
+#          /: https://content.da.live/<org>/<site>/
+#   3. delete content/ from the repository (query-index.json included; the
+#      platform generates the index) and drop the content checks from
+#      tools/validate.mjs
+#   4. connect the GitHub repository to AEM Code Sync
+#
+# Org, site and owner: TBD (needs the AEM team's Edge Delivery entitlement).
 mountpoints: {}
