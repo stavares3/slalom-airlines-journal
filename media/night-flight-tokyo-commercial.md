@@ -7,7 +7,7 @@ This document is the production brief: what to type into Firefly, in what order,
 ## Ground rules (from HANDOFF.md, non-negotiable)
 
 - Fictional brand. No real airline livery, logo, aircraft registration or airport signage. If Firefly puts a real carrier's colours on the aircraft, regenerate.
-- The aircraft is the site's aircraft, every time: a near-future electric widebody, deep midnight navy upper fuselage, ivory lower third, the Horizon Spectrum swoosh (blue, cyan, mint, amber) carved up the tail, serif SLALOM titles on the forward fuselage. Clean paint, no glowing strips, no neon lines, no pods hanging under the wing.
+- The aircraft is the site's aircraft, every time: a near-future electric widebody, deep midnight navy upper fuselage, ivory lower third, the Horizon Spectrum swoosh (blue, cyan, mint, amber) carved up the tail fin only, plain navy and ivory raked split wingtips, serif SLALOM titles on the forward fuselage. Clean paint, no glowing strips, no neon lines, no pods hanging under the wing. `hero-aircraft-alpenglow.jpg` is the canon; do not use `tail-livery-closeup.jpg` as a reference, it paints the swoosh on a winglet, which is a different aircraft.
 - The cabin is the site's cabin: the navy and ivory seats with the thin cyan seam, warm amber reading light, the wide oval windows from `cabin-premium.jpg` and `cabin-suite.jpg`.
 - Crew wear the tailored midnight navy uniform with the small Horizon Spectrum scarf or pocket square from `crew-portrait-gate.jpg`. No readable name tags.
 - Everyone on screen is synthetic. No real faces, no likeness prompts.
@@ -22,7 +22,7 @@ Firefly's Generate video takes a first frame (Image to video) and, in the curren
 | File | Use it for | Where |
 |---|---|---|
 | `hero-aircraft-alpenglow.jpg` | The aircraft in flight (shots 1 and 6): livery, wing shape, tail swoosh | `eds-blog/media/` and `prototype/public/assets/dam/media/` |
-| `tail-livery-closeup.jpg` | The tail and the SLALOM titles at the gate (shot 2 background) | `prototype/public/assets/dam/media/` |
+| `hero-aircraft-alpenglow-mobile.jpg` | The same aircraft filling the frame, SLALOM titles legible: the parked nose behind the gate window (shot 2) | `prototype/public/assets/dam/media/` |
 | `cabin-premium.jpg` | The seats, seam colour and window shape (shots 3 and 5) | `eds-blog/media/` |
 | `cabin-suite.jpg` | The dimmed cabin at night (shot 5) | `eds-blog/media/` |
 | `crew-portrait-gate.jpg` | The crew uniform and the scarf accent (shots 2 and 5) | `eds-blog/media/` |
@@ -33,7 +33,7 @@ Workflow per shot: generate a still first in Text to image with the shot prompt 
 
 ## Firefly settings
 
-- Firefly web app, Generate video. Image to video for every shot that shows the aircraft, cabin or crew (shots 1 to 7); text to video is fine for shot 8.
+- Firefly web app, Generate video. The only still input is the First frame under Frames (the Composition and Motion boxes take video); use it for every shot that shows the aircraft, cabin or crew (shots 1 to 7), and leave Last empty. With a First frame set, Firefly hides the camera motion presets, so the camera move comes from the prompt. Text to video is fine for shot 8.
 - Aspect ratio 16:9 (landscape). Highest resolution the plan allows; the assembler normalises everything to 1920 by 1080 at 24 frames per second.
 - Duration: 5 seconds per shot. If the app offers longer clips, generate at 5 seconds anyway so the cut keeps its rhythm.
 - Camera and style controls: set the shot size and camera motion from the shot list in the panel as well as in the prompt; Firefly honours the controls more reliably than prose.
@@ -67,7 +67,7 @@ Paste each one as written. The camera and style are repeated in the prose so the
 
 > Cinematic wide shot of Seattle at dusk seen from Elliott Bay, city lights switching on across the skyline, Mount Rainier faint on the horizon, a sleek near-future electric widebody airliner with deep navy upper fuselage, ivory lower fuselage and a blue to cyan to mint to amber swoosh painted up the tail climbing away over the water, the tail catching the last of the light, calm water with soft reflections, slow push in, photoreal, anamorphic, natural light, no text, no logos, no watermark.
 
-**Shot 2, `02-gate-welcome.mp4`** (references: `crew-portrait-gate.jpg`, `tail-livery-closeup.jpg`)
+**Shot 2, `02-gate-welcome.mp4`** (references: `crew-portrait-gate.jpg` for the uniform; `hero-aircraft-alpenglow-mobile.jpg` for the aircraft outside the window)
 
 > Cinematic medium wide shot inside a modern airport gate at night, a flight attendant in a tailored midnight navy uniform with a small blue and amber scarf greeting a family with a warm laugh, seen from the side, a child of about six standing at the floor to ceiling window waving at the nose of an airliner in deep navy and ivory paint parked outside under warm ramp lights, terminal light against deep blue night glass, shallow depth of field, slow dolly right, photoreal, no text, no logos, no watermark.
 
