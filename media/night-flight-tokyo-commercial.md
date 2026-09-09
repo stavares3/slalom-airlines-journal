@@ -136,6 +136,13 @@ The logo card (40 to 43 seconds) carries the Slalom Airlines mark from `eds-blog
 - The assembler holds the music at 90 percent, ducks it to 30 percent for the length of each voice line, and fades it out over the last two seconds.
 - Clip audio: Firefly clips carry no usable sound; the assembler drops it. Room tone and the small sounds (a seatbelt chime under shot 3, cabin air under shots 4 and 5) can come from Firefly's Generate sound effects or Adobe Stock; if you make them, name them `sfx-<id>.mp3` and list them in the `--sfx` option the same way as voices (see the assembler's help).
 
+## The shorter way: the API, or the run sheet
+
+Working the web app shot by shot means eight rounds of attach, paste, generate, download and rename. Two shortcuts:
+
+- **Run sheet.** A one-page checklist with a Copy button on every prompt and voice line, the first-frame file and the save-as name on each card, and ticks that persist in the browser. Published as a private artifact from this repository's session; ask for the link or rebuild it from this document.
+- **Firefly Services API.** `eds-blog/tools/firefly-generate.mjs` submits all eight shots as API jobs with the same prompts and first frames and writes the clips straight into the named files. It needs an Adobe Developer Console project with Firefly Services on the Slalom partner sandbox, with the client id and secret in `FIREFLY_CLIENT_ID` and `FIREFLY_CLIENT_SECRET` (environment only, never a file). It was written without access to Adobe's documentation, so confirm the three endpoint constants and the payload builder against the current Firefly Services reference, then `--dry-run` first: it prints every request and sends nothing.
+
 ## Hand-off
 
 Put the eight clips, the `voices` folder and `music.mp3` in one folder and either send them to me, or run:
