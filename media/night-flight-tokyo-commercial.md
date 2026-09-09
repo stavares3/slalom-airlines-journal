@@ -7,7 +7,7 @@ This document is the production brief: what to type into Firefly, in what order,
 ## Ground rules (from HANDOFF.md, non-negotiable)
 
 - Fictional brand. No real airline livery, logo, aircraft registration or airport signage. If Firefly puts a real carrier's colours on the aircraft, regenerate.
-- The aircraft is the site's aircraft, every time: a near-future electric widebody, deep midnight navy upper fuselage, ivory lower third, the Horizon Spectrum swoosh (blue, cyan, mint, amber) carved up the tail fin only, plain navy and ivory raked split wingtips, serif SLALOM titles on the forward fuselage. Clean paint, no glowing strips, no neon lines, no pods hanging under the wing. `hero-aircraft-alpenglow.jpg` is the canon; do not use `tail-livery-closeup.jpg` as a reference, it paints the swoosh on a winglet, which is a different aircraft.
+- The aircraft is the site's aircraft, every time: a near-future electric widebody, deep midnight navy upper fuselage, ivory lower third, the Horizon Spectrum swoosh (blue, cyan, mint, amber) carved up the tail fin only, plain navy and ivory raked split wingtips, serif SLALOM titles on the forward fuselage. Clean paint, no glowing strips, no neon lines, no pods hanging under the wing. `hero-aircraft-alpenglow.jpg` (and its mobile crop) is the only aircraft canon on the site. Do not use `tail-livery-closeup.jpg` (the swoosh painted on a winglet) or `ground-crew-dawn.jpg` (a white and grey tail, no titles, a podded engine) as references; each is a different aircraft. If a shot needs the aircraft on the ground, generate that still in Text to image from the in-flight image first.
 - The cabin is the site's cabin: the navy and ivory seats with the thin cyan seam, warm amber reading light, the wide oval windows from `cabin-premium.jpg` and `cabin-suite.jpg`.
 - Crew wear the tailored midnight navy uniform with the small Horizon Spectrum scarf or pocket square from `crew-portrait-gate.jpg`. No readable name tags.
 - Everyone on screen is synthetic. No real faces, no likeness prompts.
@@ -26,7 +26,6 @@ Firefly's Generate video takes a first frame (Image to video) and, in the curren
 | `cabin-premium.jpg` | The seats, seam colour and window shape (shots 3 and 5) | `eds-blog/media/` |
 | `cabin-suite.jpg` | The dimmed cabin at night (shot 5) | `eds-blog/media/` |
 | `crew-portrait-gate.jpg` | The crew uniform and the scarf accent (shots 2 and 5) | `eds-blog/media/` |
-| `ground-crew-dawn.jpg` | The aircraft at the gate before departure (shot 2, if the gate window needs it) | `eds-blog/media/` |
 | `night-flight-tokyo-poster.jpg` | The window seat framing (shot 4) | `eds-blog/media/` |
 
 Workflow per shot: generate a still first in Text to image with the shot prompt and the reference attached, pick the frame that matches the site, then run Image to video from that frame with the camera move. That keeps the livery and the seats stable, which text to video alone does not.
