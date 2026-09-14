@@ -17,10 +17,10 @@
 # the index checks from tools/validate.mjs. Until then both exist and the local
 # file is the one being served.
 #
-# CONFIRM BEFORE CLIENT USE. Adobe documentation was not reachable when this was
-# written, so the property selector syntax and the helper names (attribute,
-# match) are from prior knowledge. Check them against the current aem.live
-# indexing documentation before this goes near a client, and confirm the first
+# The selector syntax was checked on 2026-09-14 against Adobe's own
+# adobe/www-aem-live repository, which indexes with the same shape: a CSS
+# `select` on a head meta tag, a `value` of attribute(el, 'content'), and
+# og:image matched down to a site-relative path. Still confirm the first
 # preview actually produces a /query-index.json with six rows.
 
 version: 1

@@ -27,13 +27,13 @@
  * Delivery slugs it back to the class the block folder is named for
  * ("video-story"). Writing the slug directly works too.
  *
- * CONFIRM BEFORE CLIENT USE. The Word to HTML side of this contract is Adobe
- * platform behaviour, and adobe documentation was not reachable when this was
- * written. What is asserted from the shipped documents in content/ is exact;
- * what is asserted about how Word is parsed back (the horizontal rule as a
- * section break, the first row of a table as the block name, title case
- * slugging) is from prior knowledge and should be checked against the current
- * aem.live documentation before it goes in front of a client.
+ * The Word to HTML side of this contract was checked against Adobe's published
+ * material on 2026-09-14: three hyphens on their own line make a section break,
+ * a block is a table whose merged first row carries the block name, and the
+ * metadata table's first row is the word "Metadata" with name in the first
+ * column and value in the second. Adobe's own sites are unreachable from this
+ * build environment, so that was read through search result summaries rather
+ * than the pages themselves; treat it as good but not first-hand.
  *
  * Usage:
  *   node tools/to-docx.mjs                      writes word/ from content/
