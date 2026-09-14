@@ -39,6 +39,21 @@ A document is a `<body>` with `<header></header>`, `<main>` holding section `<di
 
 **Deploy path.** At deploy time the documents move to a real da.live org (or a Drive/SharePoint mountpoint) via `aem content push`, `fstab.yaml` gets the real mountpoint, and the code side goes to a GitHub repository with the AEM Code Sync app so aem.page/aem.live builds serve it. The blocks, scripts, and styles need no changes; the hand maintained `query-index.json` is replaced by the platform's generated index (the cards block already fetches it by relative URL). The flagship site links here already: the header nav, the footer and the home page's From the Journal cards read `content/query-index.json` at build time and link `/journal/...` paths; `SLAIR_JOURNAL_URL` (empty by default) rewrites that prefix to the Journal's host once it has one, so deployment is an environment variable, not a code change. On the AEM site, an empty variable sends every Journal link to the site's own Journal page (`/content/slalomair/us/en/journal`, the issue's six cards) rather than to a `/journal` root on a shared host the site does not own. Locally, set it to `http://localhost:3000/` to point the links at the `aem up` preview. Hosting: a GitHub repository of its own with the AEM Code Sync app (the Edge Delivery project at the repository root, split out with the recipe in `docs/architecture/repository-layout.md`) and a content source; the AEM team's guidance (2026-09-11) is a Slalom-owned repository, since the sandbox program would need someone to enable Code Sync on a new repository there.
 
+## Authoring in Microsoft Word
+
+When the content source is SharePoint or OneDrive, the authoring surface is Word: a document is a page, a table is a block, and a horizontal rule starts a section. `tools/to-docx.mjs` converts every document in `content/` into exactly that, so the six articles and the index can be dropped into a document library without anyone retyping them.
+
+```bash
+npm --prefix eds-blog install
+npm --prefix eds-blog run word     # writes eds-blog/word/, then verifies every file
+```
+
+`--verify` (on by default through `npm run word`) unpacks each `.docx` it just wrote, rebuilds the document skeleton from the packed XML (section count, heading levels and text, block names in order) and compares it with the source. It proves the conversion lost nothing structural without needing Word installed. `--origin` sets the host internal links are written against, since Word has no site-relative link; the default is the local `npm run up` server.
+
+The output is not tracked: it is regenerable, and an Edge Delivery repository serves every path it carries, so committed `.docx` files would be publicly fetchable.
+
+The full path from here to a deployed site (repository split, Code Sync, the SharePoint folder and its sharing, the mountpoint, preview and publish through the Sidekick, the generated query index) is `docs/journal-eds-sharepoint-runbook.md`. `helix-query.yaml` is the index definition the platform uses in place of the hand maintained `content/query-index.json`, and `tools/sidekick/config.json` is the Sidekick's project config.
+
 ## Surface
 
 The Journal renders on the flagship site's midnight ground (2026-09-07; the original ivory paper surface was retired on review so the two sites read as one brand). Everything is driven by the tokens at the top of `styles/styles.css`: `--background-color`, `--text-color`, `--muted-color`, `--rule-color`, `--plate-color` and the link colors. The masthead's last item returns to the flagship site; set `window.SLAIR_SITE_URL` before `scripts.js` in a deployed `head.html` to point it at the real origin (default: the local author).

@@ -1,9 +1,9 @@
-# Slalom Airlines Journal, content mountpoint marker (Phase 4, task E4-0).
+# Slalom Airlines Journal, content mountpoint.
 #
-# CONTENT IN CODE. This project carries its documents inside the repository:
-# da.live storage format HTML under content/ (see content/index.html and
-# content/articles/*.html). The current @adobe/aem-cli (16.21.15) auto detects
-# a local content/ directory and serves it through the production render
+# CONTENT IN CODE, FOR NOW. This project carries its documents inside the
+# repository: da.live storage format HTML under content/ (see content/index.html
+# and content/articles/*.html). The current @adobe/aem-cli (16.21.15) auto
+# detects a local content/ directory and serves it through the production render
 # pipeline (html2md then helix-html-pipeline), so `aem up` previews the whole
 # journal with zero remote content source. Empirically verified mapping:
 #
@@ -19,27 +19,49 @@
 # html2md before rendering). The layout was therefore restructured at build
 # time of E4-0 to da.live storage HTML, which is the exact format
 # `aem content clone` and da.live use, so the deploy path stays "push these
-# documents to da.live unchanged".
+# documents to the content source unchanged".
 #
-# At deploy time this file gains a real mountpoint and the documents move to
-# the mounted source (da.live, SharePoint, or Google Drive), for example:
+# No mountpoint is declared today on purpose: nothing remote is provisioned
+# (preview only, no aem.live org, no Code Sync). Declaring one here immediately
+# changes where `aem up` looks for documents, so leave this empty until the
+# content source actually exists.
+#
+# ---------------------------------------------------------------------------
+# DECLARING A MOUNTPOINT
+#
+# Replace the last line with the one form that matches the content source.
+#
+# SharePoint, which is the option that puts authoring in Microsoft Word. Point
+# at the document library folder itself, url encoded, no trailing slash:
+#
+#   mountpoints:
+#     /: https://<tenant>.sharepoint.com/sites/<site>/Shared%20Documents/journal
+#
+# OneDrive for Business, same Word authoring, a personal drive instead of a
+# site library:
+#
+#   mountpoints:
+#     /: https://<tenant>-my.sharepoint.com/personal/<user>/Documents/journal
+#
+# Google Drive, which puts authoring in Google Docs:
+#
+#   mountpoints:
+#     /: https://drive.google.com/drive/folders/<folder-id>
+#
+# da.live, which puts authoring in Adobe's own document editor:
 #
 #   mountpoints:
 #     /: https://content.da.live/<org>/<site>/
 #
-# No mountpoint is declared today on purpose: nothing remote is provisioned
-# (preview only, no aem.live org, no Code Sync). The AEM team's review
-# (2026-09-08) is right that a deployed Journal keeps its documents in
-# da.live, not in this repository. The cut-over, once a da.live org exists:
+# Whichever is chosen, the folder has to be shared with Adobe's content bus
+# service account before anything can be previewed, and the generated documents
+# go in at the paths they are served from (index.docx at the root,
+# articles/<slug>.docx in an articles folder). The whole procedure, including
+# the Word round trip, is docs/journal-eds-sharepoint-runbook.md.
 #
-#   1. aem content push  (uploads content/**/*.html unchanged)
-#   2. replace the line below with
-#        mountpoints:
-#          /: https://content.da.live/<org>/<site>/
-#   3. delete content/ from the repository (query-index.json included; the
-#      platform generates the index) and drop the content checks from
-#      tools/validate.mjs
-#   4. connect the GitHub repository to AEM Code Sync
+# After the mountpoint is live: delete content/ from this repository
+# (query-index.json included, since helix-query.yaml generates it on the
+# platform) and drop the content checks from tools/validate.mjs.
 #
 # Org, site and owner: TBD (needs the AEM team's Edge Delivery entitlement).
 mountpoints: {}

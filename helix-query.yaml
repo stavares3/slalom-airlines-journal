@@ -1,0 +1,57 @@
+# The query index the cards block reads.
+#
+# While the Journal runs locally, content/query-index.json is hand maintained
+# and tools/validate.mjs keeps it in step with content/articles/. On a deployed
+# Edge Delivery site the platform generates the index instead, from this file,
+# every time a document is previewed or published. The columns below are exactly
+# the ones blocks/cards/cards.js reads (path, title, description, image, author,
+# date, template), so the block needs no change when the switch happens.
+#
+# The source of each column is the head metadata the pipeline writes from the
+# document's Metadata table: Title, Description, Author, Date and Template rows
+# become og:title, description, author, date and template; the document's first
+# image becomes og:image. The image is matched back to a site-relative path
+# because createOptimizedPicture in the block wants one.
+#
+# Cut-over: when this index is live, delete content/query-index.json and drop
+# the index checks from tools/validate.mjs. Until then both exist and the local
+# file is the one being served.
+#
+# CONFIRM BEFORE CLIENT USE. Adobe documentation was not reachable when this was
+# written, so the property selector syntax and the helper names (attribute,
+# match) are from prior knowledge. Check them against the current aem.live
+# indexing documentation before this goes near a client, and confirm the first
+# preview actually produces a /query-index.json with six rows.
+
+version: 1
+
+indices:
+  default:
+    include:
+      - '/articles/**'
+    target: /query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      author:
+        select: head > meta[name="author"]
+        value: |
+          attribute(el, 'content')
+      date:
+        select: head > meta[name="date"]
+        value: |
+          attribute(el, 'content')
+      template:
+        select: head > meta[name="template"]
+        value: |
+          attribute(el, 'content')

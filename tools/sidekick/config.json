@@ -1,0 +1,12 @@
+{
+  "project": "Slalom Airlines Journal",
+  "plugins": [
+    {
+      "id": "query-index",
+      "title": "Query index",
+      "environments": ["preview", "live"],
+      "url": "/query-index.json",
+      "isPalette": false
+    }
+  ]
+}
