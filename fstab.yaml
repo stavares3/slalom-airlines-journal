@@ -1,7 +1,10 @@
 # Slalom Airlines Journal, content mountpoint.
 #
-# The documents are authored in Microsoft Word, in a OneDrive folder shared
-# with Adobe's content bus. The mountpoint below is what connects the two.
+# The documents are authored in Microsoft Word, in a folder shared with Adobe's
+# content bus. The single mountpoints key at the bottom of this file is what
+# connects the two. There must be exactly one of it: a second one, even with no
+# value under it, makes this file a duplicated mapping key and the YAML fails to
+# parse, which the platform reports as "No source document found" on every read.
 #
 # CONTENT STILL IN CODE, FOR NOW. content/ holds the same documents as da.live
 # storage HTML, which is what `npm run up` serves while the mountpoint settles.
@@ -24,51 +27,27 @@
 # delete content/ (query-index.json included) and drop the content checks from
 # tools/validate.mjs. Until then the local copies are what serve.
 #
-# Other content sources, for reference. SharePoint site library:
+# Other content sources, for reference. Replace the value below, keep the key.
 #
-#   /: https://TENANT.sharepoint.com/sites/SITE/Shared%20Documents/journal
+#   SharePoint site library
+#     /: https://TENANT.sharepoint.com/sites/SITE/Shared%20Documents/journal
 #
-# Google Drive, which puts authoring in Google Docs:
+#   SharePoint team site created from the Teams template, which lands on /teams
+#     /: https://TENANT.sharepoint.com/teams/SITE/Shared%20Documents/journal
 #
-#   /: https://drive.google.com/drive/folders/FOLDER-ID
+#   OneDrive for Business, a personal drive instead of a site library
+#     /: https://TENANT-my.sharepoint.com/personal/USER/Documents/journal
 #
-# da.live, Adobe's own document editor:
+#   Google Drive, which puts authoring in Google Docs
+#     /: https://drive.google.com/drive/folders/FOLDER-ID
 #
-#   /: https://content.da.live/ORG/SITE/
+#   da.live, Adobe's own document editor
+#     /: https://content.da.live/ORG/SITE/
 #
 # Whichever is used, the folder has to be shared with helix@adobe.com with edit
 # permission, or consented to through the AEM Content Integration application,
-# before anything previews. Full procedure: docs/journal-eds-sharepoint-runbook.md
-# in the slalom-airlines monorepo.
-mountpoints:
-#     /: https://<tenant>.sharepoint.com/sites/<site>/Shared%20Documents/journal
-#
-# OneDrive for Business, same Word authoring, a personal drive instead of a
-# site library:
-#
-#   mountpoints:
-#     /: https://<tenant>-my.sharepoint.com/personal/<user>/Documents/journal
-#
-# Google Drive, which puts authoring in Google Docs:
-#
-#   mountpoints:
-#     /: https://drive.google.com/drive/folders/<folder-id>
-#
-# da.live, which puts authoring in Adobe's own document editor:
-#
-#   mountpoints:
-#     /: https://content.da.live/<org>/<site>/
-#
-# Whichever is chosen, the folder has to be shared with Adobe's content bus
-# service account before anything can be previewed, and the generated documents
-# go in at the paths they are served from (index.docx at the root,
-# articles/<slug>.docx in an articles folder). The whole procedure, including
-# the Word round trip, is docs/journal-eds-sharepoint-runbook.md.
-#
-# After the mountpoint is live: delete content/ from this repository
-# (query-index.json included, since helix-query.yaml generates it on the
-# platform) and drop the content checks from tools/validate.mjs.
-#
-# Org, site and owner: TBD (needs the AEM team's Edge Delivery entitlement).
+# before anything previews. The URL is the folder's own address, url encoded,
+# with no trailing slash. Full procedure, including the Word round trip:
+# docs/journal-eds-sharepoint-runbook.md in the slalom-airlines monorepo.
 mountpoints:
   /: https://twodegrees1-my.sharepoint.com/personal/scott_tavares_slalom_com/Documents/journal
