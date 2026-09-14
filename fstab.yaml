@@ -6,6 +6,11 @@
 # value under it, makes this file a duplicated mapping key and the YAML fails to
 # parse, which the platform reports as "No source document found" on every read.
 #
+# The folder is the journal folder of the Slalom Airlines Demo team site's
+# Documents library. A site created from the Teams template lands on /teams,
+# not /sites, and the library's URL segment is Shared Documents whatever the
+# rail calls it, so the path is copied from the library rather than assumed.
+#
 # CONTENT STILL IN CODE, FOR NOW. content/ holds the same documents as da.live
 # storage HTML, which is what `npm run up` serves while the mountpoint settles.
 # Empirically verified mapping for the local CLI:
@@ -29,13 +34,12 @@
 #
 # Other content sources, for reference. Replace the value below, keep the key.
 #
-#   SharePoint site library
+#   SharePoint site made the ordinary way
 #     /: https://TENANT.sharepoint.com/sites/SITE/Shared%20Documents/journal
 #
-#   SharePoint team site created from the Teams template, which lands on /teams
-#     /: https://TENANT.sharepoint.com/teams/SITE/Shared%20Documents/journal
-#
-#   OneDrive for Business, a personal drive instead of a site library
+#   OneDrive for Business, a personal drive instead of a site library. Tried on
+#   2026-09-14 and refused: the platform resolved the mountpoint and Microsoft
+#   answered 404 on the read, for a guest account with Can edit on the folder.
 #     /: https://TENANT-my.sharepoint.com/personal/USER/Documents/journal
 #
 #   Google Drive, which puts authoring in Google Docs
@@ -47,7 +51,9 @@
 # Whichever is used, the folder has to be shared with helix@adobe.com with edit
 # permission, or consented to through the AEM Content Integration application,
 # before anything previews. The URL is the folder's own address, url encoded,
-# with no trailing slash. Full procedure, including the Word round trip:
+# with no trailing slash. A site set up through the tools.aem.live wizard also
+# stores the content source in the configuration service, and that copy is the
+# one that governs: changing this file alone is not enough. Full procedure:
 # docs/journal-eds-sharepoint-runbook.md in the slalom-airlines monorepo.
 mountpoints:
-  /: https://twodegrees1-my.sharepoint.com/personal/scott_tavares_slalom_com/Documents/journal
+  /: https://twodegrees1.sharepoint.com/teams/SlalomAirlinesDemo/Shared%20Documents/journal
