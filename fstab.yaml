@@ -1,11 +1,11 @@
 # Slalom Airlines Journal, content mountpoint.
 #
-# CONTENT IN CODE, FOR NOW. This project carries its documents inside the
-# repository: da.live storage format HTML under content/ (see content/index.html
-# and content/articles/*.html). The current @adobe/aem-cli (16.21.15) auto
-# detects a local content/ directory and serves it through the production render
-# pipeline (html2md then helix-html-pipeline), so `aem up` previews the whole
-# journal with zero remote content source. Empirically verified mapping:
+# The documents are authored in Microsoft Word, in a OneDrive folder shared
+# with Adobe's content bus. The mountpoint below is what connects the two.
+#
+# CONTENT STILL IN CODE, FOR NOW. content/ holds the same documents as da.live
+# storage HTML, which is what `npm run up` serves while the mountpoint settles.
+# Empirically verified mapping for the local CLI:
 #
 #   URL /                      -> content/index.html   (rendered page)
 #   URL /articles/<slug>       -> content/articles/<slug>.html (rendered page)
@@ -13,28 +13,34 @@
 #   URL /query-index.json      -> content/query-index.json (served raw)
 #   any other extension        -> raw file from content/, then repo root
 #
-# NOTE ON MARKDOWN: the plan's default layout was markdown in content/. The
-# CLI serves local .md files RAW ONLY and never renders them (its local
-# pipeline reads .html documents, converting them back to markdown itself via
-# html2md before rendering). The layout was therefore restructured at build
-# time of E4-0 to da.live storage HTML, which is the exact format
-# `aem content clone` and da.live use, so the deploy path stays "push these
-# documents to the content source unchanged".
+# That last line is why the film and the two podcast episodes live in media/
+# rather than in the content source: the repository serves them at their path.
 #
-# No mountpoint is declared today on purpose: nothing remote is provisioned
-# (preview only, no aem.live org, no Code Sync). Declaring one here immediately
-# changes where `aem up` looks for documents, so leave this empty until the
-# content source actually exists.
+# NOTE ON MARKDOWN: the CLI serves local .md files RAW ONLY and never renders
+# them; its local pipeline reads .html documents and converts them back to
+# markdown itself before rendering. That is why content/ is storage HTML.
 #
-# ---------------------------------------------------------------------------
-# DECLARING A MOUNTPOINT
+# Once the platform is generating /query-index.json from helix-query.yaml,
+# delete content/ (query-index.json included) and drop the content checks from
+# tools/validate.mjs. Until then the local copies are what serve.
 #
-# Replace the last line with the one form that matches the content source.
+# Other content sources, for reference. SharePoint site library:
 #
-# SharePoint, which is the option that puts authoring in Microsoft Word. Point
-# at the document library folder itself, url encoded, no trailing slash:
+#   /: https://TENANT.sharepoint.com/sites/SITE/Shared%20Documents/journal
 #
-#   mountpoints:
+# Google Drive, which puts authoring in Google Docs:
+#
+#   /: https://drive.google.com/drive/folders/FOLDER-ID
+#
+# da.live, Adobe's own document editor:
+#
+#   /: https://content.da.live/ORG/SITE/
+#
+# Whichever is used, the folder has to be shared with helix@adobe.com with edit
+# permission, or consented to through the AEM Content Integration application,
+# before anything previews. Full procedure: docs/journal-eds-sharepoint-runbook.md
+# in the slalom-airlines monorepo.
+mountpoints:
 #     /: https://<tenant>.sharepoint.com/sites/<site>/Shared%20Documents/journal
 #
 # OneDrive for Business, same Word authoring, a personal drive instead of a
