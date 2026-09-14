@@ -2,16 +2,11 @@
   "name": "slalom-airlines-journal",
   "private": true,
   "type": "module",
-  "description": "The Journal. Document-authored Edge Delivery Services blog for Slalom Airlines (fictional demo brand). Content lives in content/ as da.live storage HTML and renders locally through `npm run up` with no remote content source.",
+  "description": "The Journal. Document-authored Edge Delivery Services site for Slalom Airlines (fictional demo brand). Documents are authored in Microsoft Word on a mounted content source; content/ holds the seeded copies until the mountpoint is live.",
   "scripts": {
-    "up": "node tools/ensure-git-stub.mjs && npx -y @adobe/aem-cli up --no-open --url https://journal-local-placeholder.aem.page",
+    "up": "npx -y @adobe/aem-cli up --no-open",
     "validate": "node tools/validate.mjs",
     "word": "node tools/to-docx.mjs --verify"
-  },
-  "aemCliNotes": {
-    "git-stub": "aem up refuses to start unless the directory it serves contains .git with a resolvable HEAD and an origin remote. This directory sits inside the monorepo (whose .git is one level up) and Phase 4 forbids real remotes, so tools/ensure-git-stub.mjs writes a three file .git stub before every run. Git itself ignores it (no objects directory means it is not a valid repository), the monorepo keeps tracking eds-blog files normally, and nothing is ever fetched or pushed. See that script's header for the full story.",
-    "why-url-flag": "The stub's origin URL is '.', which the CLI cannot parse, so it falls back to --url for its proxy base. The host is a never-provisioned placeholder; it is only touched by the CLI's own head.html and metadata.json probes plus any request that misses every local file, and the Journal is built so nothing misses. Browser-side traffic stays 100 percent localhost.",
-    "cli-version-verified": "@adobe/aem-cli 16.21.15 on Node 25 (npm EBADENGINE warning at install is benign)"
   },
   "devDependencies": {
     "docx": "^9.7.1",

@@ -64,4 +64,5 @@
 # platform) and drop the content checks from tools/validate.mjs.
 #
 # Org, site and owner: TBD (needs the AEM team's Edge Delivery entitlement).
-mountpoints: {}
+mountpoints:
+  /: https://twodegrees1-my.sharepoint.com/personal/scott_tavares_slalom_com/Documents/journal
