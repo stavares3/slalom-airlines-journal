@@ -44,7 +44,7 @@ indices:
   default:
     include:
       - '/articles/*'
-    target: /test-index.json
+    target: /test2-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
