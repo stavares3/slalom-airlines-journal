@@ -1,0 +1,20 @@
+# Credentials. `aem content clone` writes a live IMS bearer token here, and an
+# Edge Delivery repository serves every path it carries, so this one matters
+# twice over.
+.hlx/
+
+# Local da.live state, derived from the git remote on every clone.
+content/.da-config.json
+
+node_modules/
+
+# Generated Word documents. Regenerable with `npm run word`, and committing them
+# would make them publicly fetchable at their own paths.
+word/
+
+# OS and editor noise.
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
