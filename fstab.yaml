@@ -1,18 +1,24 @@
 # Slalom Airlines Journal, content mountpoint.
 #
-# The documents are authored in Microsoft Word, in a folder shared with Adobe's
-# content bus. The single mountpoints key at the bottom of this file is what
-# connects the two. There must be exactly one of it: a second one, even with no
-# value under it, makes this file a duplicated mapping key and the YAML fails to
-# parse, which the platform reports as "No source document found" on every read.
+# The documents live in Document Authoring, Adobe's own editor, at the org and
+# site named below. The single mountpoints key at the bottom of this file is
+# what connects the two. There must be exactly one of it: a second one, even
+# with no value under it, makes this file a duplicated mapping key and the YAML
+# fails to parse, which the platform reports as "No source document found" on
+# every read.
 #
-# The folder is the journal folder of the Slalom Airlines Demo team site's
-# Documents library. A site created from the Teams template lands on /teams,
-# not /sites, and the library's URL segment is Shared Documents whatever the
-# rail calls it, so the path is copied from the library rather than assumed.
+# WHY DOCUMENT AUTHORING. SharePoint was set up first and is fully documented in
+# docs/journal-eds-sharepoint-runbook.md, but a content source on a customer
+# Microsoft tenant needs an OAuth grant to Adobe's AEM Content Integration
+# application, and that consent is a tenant administrator's to give. Document
+# Authoring involves no Microsoft tenant at all, and it is what Adobe's own
+# developer tutorial uses to get a site live quickly. Switching back is one
+# line, once the consent lands.
 #
 # CONTENT STILL IN CODE, FOR NOW. content/ holds the same documents as da.live
 # storage HTML, which is what `npm run up` serves while the mountpoint settles.
+# That format is not incidental: it is what Document Authoring itself stores, so
+# `aem content push` sends these files as they stand, with no conversion.
 # Empirically verified mapping for the local CLI:
 #
 #   URL /                      -> content/index.html   (rendered page)
@@ -34,26 +40,25 @@
 #
 # Other content sources, for reference. Replace the value below, keep the key.
 #
+#   The SharePoint team site this project set up, live once consent is granted
+#     /: https://twodegrees1.sharepoint.com/teams/SlalomAirlinesDemo/Shared%20Documents/journal
+#
 #   SharePoint site made the ordinary way
 #     /: https://TENANT.sharepoint.com/sites/SITE/Shared%20Documents/journal
 #
-#   OneDrive for Business, a personal drive instead of a site library. Tried on
-#   2026-09-14 and refused: the platform resolved the mountpoint and Microsoft
-#   answered 404 on the read, for a guest account with Can edit on the folder.
+#   OneDrive for Business, a personal drive instead of a site library
 #     /: https://TENANT-my.sharepoint.com/personal/USER/Documents/journal
 #
 #   Google Drive, which puts authoring in Google Docs
 #     /: https://drive.google.com/drive/folders/FOLDER-ID
 #
-#   da.live, Adobe's own document editor
-#     /: https://content.da.live/ORG/SITE/
-#
-# Whichever is used, the folder has to be shared with helix@adobe.com with edit
-# permission, or consented to through the AEM Content Integration application,
-# before anything previews. The URL is the folder's own address, url encoded,
-# with no trailing slash. A site set up through the tools.aem.live wizard also
-# stores the content source in the configuration service, and that copy is the
-# one that governs: changing this file alone is not enough. Full procedure:
+# A SharePoint or OneDrive source on a customer tenant needs the AEM Content
+# Integration application consented to by a tenant administrator, connected at
+# https://admin.hlx.page/register. Sharing a folder with helix@adobe.com is the
+# Adobe-tenant pattern and does not grant access on anyone else's tenant. A site
+# set up through the tools.aem.live wizard also stores its content source in the
+# configuration service, and that copy is the one that governs: changing this
+# file alone is not enough. Full procedure, and the whole diagnosis:
 # docs/journal-eds-sharepoint-runbook.md in the slalom-airlines monorepo.
 mountpoints:
-  /: https://twodegrees1.sharepoint.com/teams/SlalomAirlinesDemo/Shared%20Documents/journal
+  /: https://content.da.live/stavares3/slalom-airlines-journal/
