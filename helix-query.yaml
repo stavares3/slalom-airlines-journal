@@ -1,11 +1,9 @@
 # The query index the cards block reads.
 #
-# While the Journal runs locally, content/query-index.json is hand maintained
-# and tools/validate.mjs keeps it in step with content/articles/. On a deployed
-# Edge Delivery site the platform generates the index instead, from this file,
-# every time a document is previewed or published. The columns below are exactly
-# the ones blocks/cards/cards.js reads (path, title, description, image, author,
-# date, template), so the block needs no change when the switch happens.
+# The platform generates /query-index.json from this file when a document is
+# previewed, published or indexed. The columns below are exactly the ones
+# blocks/cards/cards.js reads (path, title, description, image, author, date,
+# template), so the block needs no change.
 #
 # The source of each column is the head metadata the pipeline writes from the
 # document's Metadata table: Title, Description, Author, Date and Template rows
@@ -13,15 +11,19 @@
 # image becomes og:image. The image is matched back to a site-relative path
 # because createOptimizedPicture in the block wants one.
 #
-# Cut-over: when this index is live, delete content/query-index.json and drop
-# the index checks from tools/validate.mjs. Until then both exist and the local
-# file is the one being served.
-#
 # The selector syntax was checked on 2026-09-14 against Adobe's own
 # adobe/www-aem-live repository, which indexes with the same shape: a CSS
 # `select` on a head meta tag, a `value` of attribute(el, 'content'), and
-# og:image matched down to a site-relative path. Still confirm the first
-# preview actually produces a /query-index.json with six rows.
+# og:image matched down to a site-relative path.
+#
+# 2026-09-15: the index operation returns success on all six articles and no
+# /query-index.json appears, on preview or live. The definition is correct and
+# at the repository root, so the suspicion is a code bus that still holds what
+# it synced while this repository was private, which is the same condition that
+# made every preview answer 401. Touching this file forces a fresh sync. If the
+# index still does not generate after that, the next thing to rule out is
+# whether a Helix 5 site reads this file at all or expects the index in the
+# configuration service, the way it does for the content source.
 
 version: 1
 
