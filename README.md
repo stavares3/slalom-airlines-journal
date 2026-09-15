@@ -93,30 +93,33 @@ Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`
 
 The film's next version is a 40 second commercial cut from eight Adobe Firefly clips on the site's own aircraft, cabin, seats and crew (the brand stills are the Image to video references), with voice lines, a music bed and a closing Slalom Airlines logo card: the production brief with the shot list, prompts, reference kit, voice script, title cards and music direction is `media/night-flight-tokyo-commercial.md`, and `tools/assemble-film.py` (Python 3 with `pillow` and `imageio-ffmpeg`) turns the downloaded clips, the voice files and the music into the finished file and its poster frame (voices ducked under the music, a missing voice line skipped with a note). The title fonts it draws with are in `tools/fonts/` under the SIL Open Font License; the logo card is drawn from `tools/assets/slalom-logo.png`, the site's header mark rasterised.
 
-## /query-index.json: a committed stand-in, not the generated index
+## The query index, and the one thing still missing from it
 
-`helix-query.yaml` at this repository's root defines the index the platform is
-supposed to generate at `/query-index.json` whenever a document is previewed,
-published or indexed. As of 2026-09-15 it does not generate one. The index
-operation reports success on all six articles and the path answers 404 on both
-`aem.page` and `aem.live`, so the cards grid on the home page rendered its empty
-state, "New stories are boarding shortly."
+`helix-query.yaml` at this repository's root defines the index the platform
+generates at `/query-index.json`, and as of 2026-09-15 it does. Six rows, one
+per article, with path, title, description, author, date and template all
+correctly populated from each document's metadata. The cards block on the home
+page reads it directly. A committed stand-in that served this path while the
+index was not generating has been deleted.
 
-The `query-index.json` committed beside this file is a hand maintained copy of
-the same six rows, in the same shape, placed at the repository root because an
-Edge Delivery repository serves every file it carries at that file's own path.
-That makes `/query-index.json` resolve and the cards render. **It is a stand-in
-for a demo, not the platform feature**, and it does not update when an author
-adds an article: a new article needs a row added here by hand.
+**The cause of the long outage, worth knowing before you lose a day to it:
+only published documents are indexed.** The six articles had been previewed and
+were reachable by URL, but only the home page had ever been published, so no
+index was written at all and `/query-index.json` answered 404. Preview is not
+enough. Publish.
 
-What it is not is a diagnosis. `helix-query.yaml` is unchanged and still at the
-root, so whatever is stopping the platform generating the index is still there
-and still uninvestigated. The open question, which needs Adobe's current
-documentation to answer rather than recall: on a Helix 5 site with a Document
-Authoring content source, does the indexing definition come from this file in
-the repository at all, or from the configuration service, the way the content
-source itself does? That is the trap this project has already hit once with
-`fstab.yaml`, where editing the repository moved nothing and only the Content
-Source field in Site Admin counted.
+Two more things that cost time and are cheap to know:
 
-Delete this file the moment the generated index appears.
+- **The index job runs against the default branch whatever ref the request
+  names.** A branch cannot be used to test an index definition. Put the
+  experiment on `main` and point `target` at a path nothing else uses.
+- **Rows are not removed when a definition stops matching them.** An index that
+  looks stale may be exactly that, so test against a target filename that has
+  never existed.
+
+**Still open: the `image` column is empty on all six article rows.** The home
+page row resolves its image correctly and the articles do not, and the
+difference is that the home page's image reference was repaired in the da.live
+editor while the articles still carry the references pushed by
+`aem content push`. The likely fix is to re-add each article's image in da.live,
+which would repair the article page and its card thumbnail together. Unverified.
