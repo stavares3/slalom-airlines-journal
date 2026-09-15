@@ -25,13 +25,26 @@
 # whether a Helix 5 site reads this file at all or expects the index in the
 # configuration service, the way it does for the content source.
 
+# 2026-09-15, A LIVE TEST, deliberately on main.
+#
+# The index job runs against main whatever ref the request names (the log
+# viewer shows an indexer row on main alongside index POSTs made on a branch),
+# so a branch cannot test this definition. Hence testing here.
+#
+# Two changes, both reversible and neither of them touching what the site
+# serves: the glob is broadened to '/**', and the target is moved to
+# /test-index.json so nothing collides with the committed stand-in that the
+# cards block reads. If /test-index.json appears after an index run, the
+# platform does read this file and the glob was the problem. If it does not,
+# this file is not read at all.
+
 version: 1
 
 indices:
   default:
     include:
-      - '/articles/**'
-    target: /query-index.json
+      - '/**'
+    target: /test-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
