@@ -123,3 +123,31 @@ difference is that the home page's image reference was repaired in the da.live
 editor while the articles still carry the references pushed by
 `aem content push`. The likely fix is to re-add each article's image in da.live,
 which would repair the article page and its card thumbnail together. Unverified.
+
+## Editing these documents in Document Authoring
+
+Three things about the da.live editor that are not obvious and cost real time.
+
+**Blocks are inserted with `/`, not from the toolbar.** The formatting toolbar
+has no table control and the Paragraph dropdown is text styles only. On an
+empty line the editor shows "Tap '/' to insert"; typing `/` opens a menu whose
+first entry is **Insert block**.
+
+**A block's name is just editable text in its grey header row.** If the inserter
+gives you the wrong block, retype the name in that row and it becomes the block
+you wanted. `columns` renamed to `video-story` is a `video-story` block.
+
+**Do not delete an image that is part of a block.** In `night-flight-tokyo` the
+poster is a cell of the `video-story` block, so deleting it removed the film
+player as well, and rebuilding the block by hand was the only way back. Images
+in the other five articles are plain body paragraphs and are safe to replace in
+place. `blocks/video-story/video-story.js` finds its poster and its `.mp4` link
+by searching anywhere inside the block, so cell placement does not matter, but
+the block must exist and be named correctly.
+
+**Images pushed by `aem content push` do not resolve.** Every document arrived
+with an image reference the publish pipeline could not resolve: the editor
+renders it, the published page does not, and the pipeline emits no `og:image`,
+so the article's card has no thumbnail. Re-adding the image in the editor and
+republishing fixes the page and the card together. This is the one real defect
+the CLI import route introduced, and it has to be repaired document by document.
