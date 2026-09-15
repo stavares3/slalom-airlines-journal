@@ -43,7 +43,7 @@ version: 1
 indices:
   default:
     include:
-      - '/**'
+      - '/articles/*'
     target: /test-index.json
     properties:
       title:
