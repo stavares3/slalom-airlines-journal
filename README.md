@@ -92,3 +92,31 @@ The two episodes are **synthesized demo narration** and are labeled as such on t
 Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic, 30 seconds, no end card: the booking call to action is the ending); its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
 
 The film's next version is a 40 second commercial cut from eight Adobe Firefly clips on the site's own aircraft, cabin, seats and crew (the brand stills are the Image to video references), with voice lines, a music bed and a closing Slalom Airlines logo card: the production brief with the shot list, prompts, reference kit, voice script, title cards and music direction is `media/night-flight-tokyo-commercial.md`, and `tools/assemble-film.py` (Python 3 with `pillow` and `imageio-ffmpeg`) turns the downloaded clips, the voice files and the music into the finished file and its poster frame (voices ducked under the music, a missing voice line skipped with a note). The title fonts it draws with are in `tools/fonts/` under the SIL Open Font License; the logo card is drawn from `tools/assets/slalom-logo.png`, the site's header mark rasterised.
+
+## /query-index.json: a committed stand-in, not the generated index
+
+`helix-query.yaml` at this repository's root defines the index the platform is
+supposed to generate at `/query-index.json` whenever a document is previewed,
+published or indexed. As of 2026-09-15 it does not generate one. The index
+operation reports success on all six articles and the path answers 404 on both
+`aem.page` and `aem.live`, so the cards grid on the home page rendered its empty
+state, "New stories are boarding shortly."
+
+The `query-index.json` committed beside this file is a hand maintained copy of
+the same six rows, in the same shape, placed at the repository root because an
+Edge Delivery repository serves every file it carries at that file's own path.
+That makes `/query-index.json` resolve and the cards render. **It is a stand-in
+for a demo, not the platform feature**, and it does not update when an author
+adds an article: a new article needs a row added here by hand.
+
+What it is not is a diagnosis. `helix-query.yaml` is unchanged and still at the
+root, so whatever is stopping the platform generating the index is still there
+and still uninvestigated. The open question, which needs Adobe's current
+documentation to answer rather than recall: on a Helix 5 site with a Document
+Authoring content source, does the indexing definition come from this file in
+the repository at all, or from the configuration service, the way the content
+source itself does? That is the trap this project has already hit once with
+`fstab.yaml`, where editing the repository moved nothing and only the Content
+Source field in Site Admin counted.
+
+Delete this file the moment the generated index appears.
