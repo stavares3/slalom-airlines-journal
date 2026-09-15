@@ -25,12 +25,17 @@
 # whether a Helix 5 site reads this file at all or expects the index in the
 # configuration service, the way it does for the content source.
 
+# TEST BRANCH ONLY. The include glob is broadened from '/articles/**' to '/**'
+# to find out whether the glob is why no index generates, and the committed
+# stand-in query-index.json is removed so a result here cannot be that file.
+# Do not merge. main carries the stand-in and the original glob.
+
 version: 1
 
 indices:
   default:
     include:
-      - '/articles/**'
+      - '/**'
     target: /query-index.json
     properties:
       title:
