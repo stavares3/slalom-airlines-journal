@@ -11,10 +11,13 @@
 import { registerComponent } from '../../scripts/datalayer.js';
 import { siteUrl } from '../../scripts/site-links.js';
 
+// The home page carries one issue rather than three standing sections, so the
+// masthead offers the issue and the film that opens it. Both are real
+// destinations: anchors to sections that no longer exist would be worse than a
+// short nav.
 const SECTIONS = [
-  ['Stories', '/#stories'],
-  ['Podcasts', '/#podcasts'],
-  ['Films', '/#films'],
+  ['The Issue', '/'],
+  ['The Film', '/articles/night-flight-tokyo'],
 ];
 
 // The site's tail-fin mark (three livery bands up the fin) beside the
