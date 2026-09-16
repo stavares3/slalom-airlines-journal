@@ -5,6 +5,11 @@
 <meta name="slair-edge-domain" content=""/>
 <meta name="slair-alloy-src" content=""/>
 <script nonce="aem">window.SAMPLE_PAGEVIEWS_AT_RATE = 'off';</script>
+<!-- The flagship site's language root, which every link from the Journal back
+     into the airline is built from (scripts/site-links.js). Without it the
+     Journal falls back to a local AEM author and those links point at
+     localhost. Change this one value when the site moves environment. -->
+<script nonce="aem">window.SLAIR_SITE_URL = 'https://publish-p11802-e92258.adobeaemcloud.com/content/slalomair/us/en';</script>
 <script nonce="aem" src="/scripts/aem.js" type="module"></script>
 <script nonce="aem" src="/scripts/scripts.js" type="module"></script>
 <link rel="stylesheet" href="/styles/styles.css"/>
