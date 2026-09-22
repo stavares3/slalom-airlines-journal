@@ -35,12 +35,21 @@ let pageState = null;
 
 function stamp() { return new Date().toISOString(); }
 
-function pageDetails() {
+/*
+ * The standard page block every event carries. siteSection goes on the XDM
+ * standard path as well as in _slalomair, because the standard path is the one
+ * the flagship site populates and the one the Customer Journey Analytics Site
+ * Section dimension reads: without it, Journal rows report a blank section
+ * beside the site's own. The optional page argument lets a page view use the
+ * object it was handed rather than module state, so the two cannot disagree.
+ */
+function pageDetails(page = pageState) {
   return {
     web: {
       webPageDetails: {
         URL: window.location.href,
-        name: pageState?.pageName || document.title,
+        name: page?.pageName || document.title,
+        siteSection: page?.siteSection || 'journal',
       },
     },
   };
@@ -50,7 +59,7 @@ export function xdmFromPage(page) {
   return {
     eventType: 'web.webpagedetails.pageViews',
     timestamp: stamp(),
-    ...pageDetails(),
+    ...pageDetails(page),
     _slalomair: {
       template: page.template, language: page.language, currency: page.currency, tags: page.tags, siteSection: page.siteSection,
     },
