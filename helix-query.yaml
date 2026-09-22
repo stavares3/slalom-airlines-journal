@@ -25,12 +25,31 @@
 # whether a Helix 5 site reads this file at all or expects the index in the
 # configuration service, the way it does for the content source.
 
+# 2026-09-15. THIS FILE IS READ BY THE PLATFORM. The definition below is the
+# intended one, and it currently produces nothing, for a reason not yet found.
+#
+# Measured, by indexing the same seven documents three times and changing only
+# the include:
+#
+#   include '/articles/**'  ->  no index file written at all
+#   include '/**'           ->  index written, ONE row, the home page '/'
+#   include '/articles/*'   ->  no index file written at all
+#
+# So the file is read and acted on (the '/**' run wrote a correct row with
+# title, description and image populated from the document's metadata), and the
+# home page is the only document on this site that has ever indexed. Nothing
+# under /articles/ is picked up by any glob. That makes this a property of the
+# article documents rather than of the pattern, and it is unsolved.
+#
+# Until it is, nothing is generated at the target below and the committed
+# query-index.json at the repository root is what serves. See README.md.
+
 version: 1
 
 indices:
   default:
     include:
-      - '/articles/**'
+      - '/articles/*'
     target: /query-index.json
     properties:
       title:

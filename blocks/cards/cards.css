@@ -4,7 +4,7 @@
 main .cards .cards-list {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   gap: var(--space-4);
   margin: var(--space-4) 0 0;
   padding: 0;
@@ -95,6 +95,13 @@ main .cards .cards-card-date {
   padding-top: var(--space-2);
   font-size: var(--text-sm);
   color: var(--muted-color);
+}
+
+/* The byline reads as one small-caps line, author first, the way the cards on
+   the flagship site's own Journal page do. */
+main .cards .cards-card-author {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 main .cards .cards-empty {

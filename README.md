@@ -92,3 +92,62 @@ The two episodes are **synthesized demo narration** and are labeled as such on t
 Imagery is copied from the prototype's DAM (`prototype/public/assets/dam/media/`), committed here rather than hotlinked across roots so the Journal stays self contained. The film, `night-flight-tokyo.mp4`, is a generated short (OpenArt, 2026-09-07; every person in it is synthetic, 30 seconds, no end card: the booking call to action is the ending); its poster `night-flight-tokyo-poster.jpg` is a frame from it and also lives in the prototype's DAM for the site's Journal cards. `brand-film-loop.mp4` stays as the home page's hero footage source.
 
 The film's next version is a 40 second commercial cut from eight Adobe Firefly clips on the site's own aircraft, cabin, seats and crew (the brand stills are the Image to video references), with voice lines, a music bed and a closing Slalom Airlines logo card: the production brief with the shot list, prompts, reference kit, voice script, title cards and music direction is `media/night-flight-tokyo-commercial.md`, and `tools/assemble-film.py` (Python 3 with `pillow` and `imageio-ffmpeg`) turns the downloaded clips, the voice files and the music into the finished file and its poster frame (voices ducked under the music, a missing voice line skipped with a note). The title fonts it draws with are in `tools/fonts/` under the SIL Open Font License; the logo card is drawn from `tools/assets/slalom-logo.png`, the site's header mark rasterised.
+
+## The query index, and the one thing still missing from it
+
+`helix-query.yaml` at this repository's root defines the index the platform
+generates at `/query-index.json`, and as of 2026-09-15 it does. Six rows, one
+per article, with path, title, description, author, date and template all
+correctly populated from each document's metadata. The cards block on the home
+page reads it directly. A committed stand-in that served this path while the
+index was not generating has been deleted.
+
+**The cause of the long outage, worth knowing before you lose a day to it:
+only published documents are indexed.** The six articles had been previewed and
+were reachable by URL, but only the home page had ever been published, so no
+index was written at all and `/query-index.json` answered 404. Preview is not
+enough. Publish.
+
+Two more things that cost time and are cheap to know:
+
+- **The index job runs against the default branch whatever ref the request
+  names.** A branch cannot be used to test an index definition. Put the
+  experiment on `main` and point `target` at a path nothing else uses.
+- **Rows are not removed when a definition stops matching them.** An index that
+  looks stale may be exactly that, so test against a target filename that has
+  never existed.
+
+**Still open: the `image` column is empty on all six article rows.** The home
+page row resolves its image correctly and the articles do not, and the
+difference is that the home page's image reference was repaired in the da.live
+editor while the articles still carry the references pushed by
+`aem content push`. The likely fix is to re-add each article's image in da.live,
+which would repair the article page and its card thumbnail together. Unverified.
+
+## Editing these documents in Document Authoring
+
+Three things about the da.live editor that are not obvious and cost real time.
+
+**Blocks are inserted with `/`, not from the toolbar.** The formatting toolbar
+has no table control and the Paragraph dropdown is text styles only. On an
+empty line the editor shows "Tap '/' to insert"; typing `/` opens a menu whose
+first entry is **Insert block**.
+
+**A block's name is just editable text in its grey header row.** If the inserter
+gives you the wrong block, retype the name in that row and it becomes the block
+you wanted. `columns` renamed to `video-story` is a `video-story` block.
+
+**Do not delete an image that is part of a block.** In `night-flight-tokyo` the
+poster is a cell of the `video-story` block, so deleting it removed the film
+player as well, and rebuilding the block by hand was the only way back. Images
+in the other five articles are plain body paragraphs and are safe to replace in
+place. `blocks/video-story/video-story.js` finds its poster and its `.mp4` link
+by searching anywhere inside the block, so cell placement does not matter, but
+the block must exist and be named correctly.
+
+**Images pushed by `aem content push` do not resolve.** Every document arrived
+with an image reference the publish pipeline could not resolve: the editor
+renders it, the published page does not, and the pipeline emits no `og:image`,
+so the article's card has no thumbnail. Re-adding the image in the editor and
+republishing fixes the page and the card together. This is the one real defect
+the CLI import route introduced, and it has to be repaired document by document.

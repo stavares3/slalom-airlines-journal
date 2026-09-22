@@ -5,7 +5,8 @@
  * the same markup works under `npm run up` today and on a deployed .page
  * host later. Entries render newest first as linked cards carrying image,
  * eyebrow (the article template as a section label), title, description,
- * and date. Everything metadata-derived lands via textContent.
+ * and a byline of author and date. Everything metadata-derived lands via
+ * textContent.
  */
 
 import { createOptimizedPicture } from '../../scripts/aem.js';
@@ -90,6 +91,12 @@ export default async function decorate(block) {
 
     const date = document.createElement('p');
     date.className = 'cards-card-date';
+    if (entry.author) {
+      const author = document.createElement('span');
+      author.className = 'cards-card-author';
+      author.textContent = entry.author;
+      date.append(author, document.createTextNode(' \u00b7 '));
+    }
     const time = document.createElement('time');
     time.dateTime = entry.date || '';
     time.textContent = formatDate(entry.date);

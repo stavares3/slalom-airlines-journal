@@ -379,3 +379,19 @@ main .section.midnight h3 {
     scroll-behavior: auto !important;
   }
 }
+
+/* Section style "issue": the opening line of the section reads as an eyebrow
+   above its heading, the way the issue label does on the flagship site's own
+   Journal page. Opt in with a Section Metadata table whose Style row says
+   issue, so no other section is affected. */
+main .section.issue .default-content-wrapper > p:first-child {
+  margin: 0;
+  font-size: var(--text-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+
+main .section.issue .default-content-wrapper > p:first-child + h2 {
+  margin-top: var(--space-2);
+}

@@ -86,3 +86,15 @@ main .hero .hero-standfirst {
     padding: var(--space-5) var(--space-4) var(--space-4);
   }
 }
+
+/* Calls to action below the standfirst, kept as buttons rather than copy. */
+main .hero .hero-actions {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+main .hero .hero-actions p {
+  margin: 0;
+}

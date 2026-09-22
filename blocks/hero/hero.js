@@ -1,10 +1,14 @@
 /*
  * Journal hero. Decorates the authored hero table (one cell holding an
- * image, an eyebrow paragraph, the title heading, and an optional standfirst
- * paragraph) into the site's hero grammar: the image fills the block behind
+ * image, an eyebrow paragraph, the title heading, an optional standfirst
+ * paragraph, and optionally one or more links) into the site's hero grammar: the image fills the block behind
  * one SOLID midnight scrim with ivory type on top. No gradient anywhere in
  * this block, in the scrim or in the text; the masthead swoosh stays the
  * Journal's single gradient moment.
+ *
+ * A paragraph below the title that holds only a link is a call to action, and
+ * is kept exactly as the boilerplate decorated it rather than being reclassed
+ * as standfirst copy, which would strip its button styling.
  */
 
 import { registerComponent } from '../../scripts/datalayer.js';
@@ -52,10 +56,19 @@ export default function decorate(block) {
     content.append(eyebrow);
   }
   if (title) content.append(title);
-  after.forEach((p) => {
+  const isAction = (p) => p.querySelector('a') && !p.textContent.replace(p.querySelector('a').textContent, '').trim();
+  after.filter((p) => !isAction(p)).forEach((p) => {
     p.className = 'hero-standfirst';
     content.append(p);
   });
+
+  const actions = after.filter(isAction);
+  if (actions.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'hero-actions';
+    actions.forEach((p) => wrap.append(p));
+    content.append(wrap);
+  }
 
   block.replaceChildren(mediaWrap, scrim, content);
 
