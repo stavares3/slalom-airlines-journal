@@ -131,6 +131,23 @@ export async function connectEdge() {
   if (datastreamId && orgId && alloySrc) {
     try {
       await loadAlloy(alloySrc);
+      // defaultConsent 'in' is a decision taken on 2026-09-25, not an oversight.
+      // The flagship AEM site configures 'pending' and gates every send on
+      // consent.analytics behind its banner. The Journal has no banner and
+      // collects from page load. That difference is accepted so media
+      // engagement here reaches Customer Journey Analytics beside the site's
+      // own events, which is the reason this bridge exists at all.
+      //
+      // What makes it acceptable: every passenger, booking and person in this
+      // demonstration is invented, and no form posts anywhere.
+      //
+      // What would change it: the Journal being shown as a consent reference
+      // rather than as content authoring. It would then need its own banner and
+      // 'pending' here, and the harder half is that consent does not carry
+      // across origins. A reader on aem.live and the same reader on the AEM
+      // publish host are two separate decisions unless a CMP on a shared domain
+      // handles it. Recorded in docs/adobe-provisioning-request.md section 4 in
+      // the slalom-airlines repository.
       const config = { datastreamId, orgId, defaultConsent: 'in' };
       if (edgeDomain) config.edgeDomain = edgeDomain;
       await window.alloy('configure', config);
