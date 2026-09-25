@@ -64,7 +64,11 @@ The Journal renders on the flagship site's midnight ground (2026-09-07; the orig
 
 ## Web SDK bridge (CJA)
 
-`scripts/edge-bridge.js` turns the data layer into XDM ExperienceEvents on the flagship datastream: the page view, `cmp:show`, `cmp:click` and the four `media:*` events, `eventType` `slalomair.<event>` with the payload under `_slalomair`, the same mapping the site uses. Set `slair-datastream-id`, `slair-org-id`, optionally `slair-edge-domain`, and `slair-alloy-src` (the Web SDK library URL your organization standardizes on, or a self-hosted copy) in `head.html` for a deployed Journal; with them empty, as in the repo, nothing third-party loads and every record goes to the edge simulator (`window.slairEdge.sent`, and `console.debug("[slair edge-sim]")`) so a demo can show the exact payloads. The CJA metrics built on these are in `docs/architecture/cja-data-views.md` section 2.2.
+`scripts/edge-bridge.js` turns the data layer into XDM ExperienceEvents on the flagship datastream: the page view, `cmp:show`, `cmp:click` and the four `media:*` events, `eventType` `slalomair.<event>` with the payload under `_slalomair`, the same mapping the site uses. Set `slair-datastream-id`, `slair-org-id`, optionally `slair-edge-domain`, and `slair-alloy-src` (the Web SDK library URL your organization standardizes on, or a self-hosted copy) in `head.html` for a deployed Journal; with them empty, as in the repo, nothing third-party loads and nothing is sent: there is no simulator to fall back to, so what a page does here is what it would do against a real datastream. The CJA metrics built on these are in `docs/architecture/cja-data-views.md` section 2.2.
+
+## Adobe Tags
+
+`scripts/delayed.js` loads the Adobe Tags (Launch) library named by `slair-tags-library` in `head.html`, in the delayed phase so a tag manager cannot cost the Journal its Core Web Vitals. Empty in the repo, so nothing loads until a deployment sets it. The value is validated the same way the flagship site validates its own: a same origin path, or an `https` URL whose host ends `.adobedtm.com`. Anything else leaves the embed off, which looks identical to an unset value, so read the rendered page rather than assume.
 
 ## Film call to action
 
