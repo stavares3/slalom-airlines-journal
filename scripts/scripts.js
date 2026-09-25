@@ -27,6 +27,7 @@ import {
 } from './aem.js';
 import { initDataLayer } from './datalayer.js';
 import { initEdgeBridge, connectEdge } from './edge-bridge.js';
+import { loadTags } from './delayed.js';
 
 /**
  * load fonts.css and set a session storage flag
@@ -178,9 +179,12 @@ async function loadLazy(doc) {
  * the player blocks and stay local either way.
  */
 function loadDelayed() {
-  // The Web SDK connection (or the local edge simulator) attaches here, after
-  // LCP and the lazy sections; everything queued since loadEager flushes then.
+  // The Web SDK connection attaches here, after LCP and the lazy sections;
+  // everything queued since loadEager flushes then.
   connectEdge();
+  // Adobe Tags, from the slair-tags-library meta in head.html. Off unless a
+  // deployment sets it, and the delayed phase keeps it clear of LCP.
+  loadTags();
 }
 
 async function loadPage() {

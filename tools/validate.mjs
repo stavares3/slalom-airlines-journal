@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const EXPECTED = { blocks: 7, articles: 6 };
+const EXPECTED = { blocks: 8, articles: 6 };
 
 // Article Template row values and the media block each one must embed
 // (task E4-2): podcast pages carry the podcast player, film pages carry the
@@ -230,8 +230,36 @@ if (!existsSync(indexPath)) {
   }
 }
 
+// 6. fstab.yaml must carry each top-level key exactly once.
+//
+// A duplicated mapping key is not a warning in YAML, it is a parse error: a
+// standard parser refuses the whole document. That happened on the deployed
+// Journal repository on 2026-09-14, where an edit left a bare `mountpoints:`
+// line above the real one. The platform then had no mountpoint at all, and
+// every content read came back as "No source document found", which reads
+// exactly like a folder that was never shared. Hours went into the share.
+// This check is three lines and would have caught it immediately.
+const fstabPath = path.join(ROOT, "fstab.yaml");
+if (!existsSync(fstabPath)) {
+  errors.push("fstab.yaml: missing");
+} else {
+  const seen = new Map();
+  for (const line of read(fstabPath).split(/\r?\n/)) {
+    const m = /^([A-Za-z_][\w-]*):/.exec(line);
+    if (m) seen.set(m[1], (seen.get(m[1]) || 0) + 1);
+  }
+  for (const [key, count] of seen) {
+    if (count > 1) {
+      errors.push(`fstab.yaml: top-level key "${key}" appears ${count} times; YAML rejects a duplicated mapping key and the whole file fails to parse`);
+    }
+  }
+  if (!seen.has("mountpoints")) {
+    errors.push("fstab.yaml: no mountpoints key");
+  }
+}
+
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`validate OK: ${blockDirs.length} blocks, ${articleFiles.length} articles, banned copy + media + query-index conformant`);
+console.log(`validate OK: ${blockDirs.length} blocks, ${articleFiles.length} articles, banned copy + media + query-index + fstab conformant`);

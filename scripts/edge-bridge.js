@@ -13,11 +13,10 @@
  *    queued.
  *  - connectEdge() runs late (loadDelayed). With a datastream configured
  *    it loads the Web SDK library from the URL the deployment names,
- *    configures it, and flushes the queue through alloy("sendEvent");
- *    without one (every local preview) it flushes to the edge simulator:
- *    window.slairEdge.sent holds every XDM record and each is logged with
- *    console.debug("[slair edge-sim]"), so a demo can show the exact
- *    payloads CJA would receive.
+ *    configures it, and flushes the queue through alloy("sendEvent").
+ *    Without one, nothing is sent and the queue is dropped: there is no
+ *    simulator to fall back to, so what a page does here is what it would
+ *    do against a real datastream.
  *
  * Configuration comes from head.html meta tags, all empty in the repo:
  *   slair-datastream-id, slair-org-id, slair-edge-domain (optional),
@@ -102,15 +101,6 @@ export function initEdgeBridge() {
   };
 }
 
-function simulator() {
-  window.slairEdge = window.slairEdge || { mode: 'simulator', sent: [] };
-  return (xdm) => {
-    window.slairEdge.sent.push(xdm);
-    // eslint-disable-next-line no-console
-    console.debug('[slair edge-sim]', xdm.eventType, xdm);
-  };
-}
-
 function loadAlloy(src) {
   return new Promise((resolve, reject) => {
     // The Web SDK's standard command queue: "alloy" collects calls until the library arrives.
@@ -148,9 +138,10 @@ export async function connectEdge() {
       send = (xdm) => { window.slairEdge.sent.push(xdm); window.alloy('sendEvent', { xdm }).catch(() => {}); };
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.warn('[slair edge] falling back to the simulator:', e.message);
+      console.warn('[slair edge] the Web SDK did not load, so nothing is sent:', e.message);
     }
   }
-  sender = send || simulator();
+  sender = send;
+  if (!sender) { queue.length = 0; return; }
   queue.splice(0).forEach(sender);
 }
