@@ -1,0 +1,41 @@
+# What the code bus must not serve.
+#
+# Adobe's boilerplate opens this file with `.*`, and that one line is
+# deliberately NOT copied here. It would also exclude .well-known/, and
+# .well-known/adobe/cloudmanager-challenge.txt is what Cloud Manager fetched to
+# verify ownership of this site. Verification can be re-checked at any time and
+# losing it would be silent, so every dot file below is named individually and
+# nothing dot-prefixed is excluded by accident.
+#
+# Everything listed here is fetchable at its own path until this file exists.
+# That is the point: the site was serving its own package.json and README.
+
+# Node metadata. A site has no reason to publish its manifest or lockfile.
+package.json
+package-lock.json
+
+# Documentation and internal notes, including the narration notes under media/.
+# Nothing on the site reads these: the podcast player's synthesized-audio label
+# is a literal in blocks/podcast-player/podcast-player.js, not a fetch.
+*.md
+
+# Lint and editor configuration, added for boilerplate parity.
+.editorconfig
+.eslintignore
+.eslintrc.cjs
+.stylelintrc.json
+
+# Git, and this file.
+.gitignore
+.hlxignore
+
+# Build tooling and its assets. tools/sidekick/config.json is deliberately
+# absent from this list: the Sidekick fetches it over the code bus and the
+# project plugin disappears without it.
+tools/assemble-film.py
+tools/ensure-git-stub.mjs
+tools/firefly-generate.mjs
+tools/to-docx.mjs
+tools/validate.mjs
+tools/assets/*
+tools/fonts/*

@@ -267,6 +267,42 @@ if (!existsSync(fstabPath)) {
   }
 }
 
+// 7. .hlxignore must not exclude the Cloud Manager challenge or the Sidekick.
+//
+// Adobe's boilerplate opens its own .hlxignore with `.*`, and copying that line
+// wholesale is the obvious thing to do. It would stop the code bus serving
+// .well-known/adobe/cloudmanager-challenge.txt, which is what Cloud Manager
+// fetched to verify ownership of this site. Verification can be re-checked at
+// any time, nothing would announce the failure, and the symptom would appear
+// weeks later as a site that has quietly lost its domain.
+//
+// tools/sidekick/config.json is the same shape of problem: the Sidekick fetches
+// it over the code bus, and excluding tools/ wholesale makes the project plugin
+// vanish with no error anywhere.
+//
+// Neither can be checked from a local preview, because the local CLI ignores
+// .hlxignore completely and serves every one of these paths. This check is the
+// only thing standing between a paste and a silent outage.
+const hlxIgnorePath = path.join(ROOT, ".hlxignore");
+if (existsSync(hlxIgnorePath)) {
+  const patterns = read(hlxIgnorePath)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+
+  for (const pattern of patterns) {
+    if (/^\.\*/.test(pattern)) {
+      errors.push(`.hlxignore: the pattern "${pattern}" excludes every dot-prefixed path, including .well-known/adobe/cloudmanager-challenge.txt; name each dot file instead`);
+    }
+    if (/^\.well-known/.test(pattern)) {
+      errors.push(`.hlxignore: "${pattern}" excludes the Cloud Manager ownership challenge`);
+    }
+    if (/^tools\/?\*?$/.test(pattern) || /^tools\/sidekick/.test(pattern)) {
+      errors.push(`.hlxignore: "${pattern}" excludes tools/sidekick/config.json, which the Sidekick fetches over the code bus`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
