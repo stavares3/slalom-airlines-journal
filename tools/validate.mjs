@@ -74,10 +74,19 @@ if (blockDirs.length !== EXPECTED.blocks) {
   errors.push(`Expected exactly ${EXPECTED.blocks} blocks, found ${blockDirs.length} (${blockDirs.join(", ")})`);
 }
 
-// 2. Article inventory.
+// 2. Article inventory, when the documents are in the repository at all.
+//
+// Two layouts are valid and the difference between them is deliberate. The
+// monorepo's eds-blog/ carries content/, so `aem up` previews the whole Journal
+// with no remote content source. The deployed repository does not: fstab.yaml
+// points at da.live, the platform is the source of truth, and a second copy in
+// git would be a thing to edit by mistake. The checks that read documents run
+// only in the first case, and the ones that read block code, styles and
+// fstab.yaml run in both.
+const hasLocalContent = existsSync(path.join(ROOT, "content"));
 const articlesDir = path.join(ROOT, "content", "articles");
 const articleFiles = [...walk(articlesDir, ".html")];
-if (articleFiles.length !== EXPECTED.articles) {
+if (hasLocalContent && articleFiles.length !== EXPECTED.articles) {
   errors.push(`Expected exactly ${EXPECTED.articles} articles, found ${articleFiles.length}`);
 }
 
@@ -195,9 +204,9 @@ for (const p of readerFiles) {
 // 5. query-index.json must mirror the article set exactly, both directions,
 // and every entry must be complete.
 const indexPath = path.join(ROOT, "content", "query-index.json");
-if (!existsSync(indexPath)) {
+if (hasLocalContent && !existsSync(indexPath)) {
   errors.push("content/query-index.json: missing");
-} else {
+} else if (existsSync(indexPath)) {
   let idx;
   try {
     idx = JSON.parse(read(indexPath));
@@ -262,4 +271,7 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`validate OK: ${blockDirs.length} blocks, ${articleFiles.length} articles, banned copy + media + query-index + fstab conformant`);
+const contentNote = hasLocalContent
+  ? `${articleFiles.length} articles, query-index`
+  : "content from the mountpoint";
+console.log(`validate OK: ${blockDirs.length} blocks, ${contentNote}, banned copy + media + fstab conformant`);
