@@ -60,7 +60,11 @@ export function xdmFromPage(page) {
     timestamp: stamp(),
     ...pageDetails(page),
     _slalomair: {
-      template: page.template, language: page.language, currency: page.currency, tags: page.tags, siteSection: page.siteSection,
+      template: page.template,
+      language: page.language,
+      currency: page.currency,
+      tags: page.tags,
+      siteSection: page.siteSection,
     },
   };
 }
@@ -105,10 +109,17 @@ function loadAlloy(src) {
   return new Promise((resolve, reject) => {
     // The Web SDK's standard command queue: "alloy" collects calls until the library arrives.
     if (!window.alloy) {
+      // __alloyNS is the Web SDK's own global, named by Adobe. Renaming it would
+      // stop alloy.js finding its queue, so the dangle rule is disabled here.
+      /* eslint-disable no-underscore-dangle */
       window.__alloyNS = window.__alloyNS || [];
       window.__alloyNS.push('alloy');
+      /* eslint-enable no-underscore-dangle */
       window.alloy = function alloyQueue(...args) {
-        return new Promise((res, rej) => { (window.alloy.q = window.alloy.q || []).push([res, rej, args]); });
+        return new Promise((res, rej) => {
+          window.alloy.q = window.alloy.q || [];
+          window.alloy.q.push([res, rej, args]);
+        });
       };
     }
     const script = document.createElement('script');

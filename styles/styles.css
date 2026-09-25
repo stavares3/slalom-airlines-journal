@@ -28,7 +28,7 @@
   --grad-horizon: linear-gradient(100deg, #2E5BE8 0%, #4FC9E8 36%, #6FE3B0 68%, #F2A93B 100%);
 
   /* Typography */
-  --font-display: "Fraunces Variable", fraunces-fallback, Georgia, serif;
+  --font-display: "Fraunces Variable", fraunces-fallback, georgia, serif;
   --font-sans: "Inter Variable", inter-fallback, "Segoe UI", system-ui, sans-serif;
   --text-2xs: .7rem;
   --text-xs: .78rem;
@@ -52,8 +52,8 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-pill: 999px;
-  --shadow-soft: 0 2px 8px rgba(6, 13, 31, .18), 0 12px 32px rgba(6, 13, 31, .22);
-  --shadow-glow: 0 6px 28px rgba(79, 201, 232, .28);
+  --shadow-soft: 0 2px 8px rgb(6 13 31 / 18%), 0 12px 32px rgb(6 13 31 / 22%);
+  --shadow-glow: 0 6px 28px rgb(79 201 232 / 28%);
   --ease-out-expo: cubic-bezier(.22, 1, .36, 1);
   --dur-fast: 180ms;
   --dur-med: 420ms;
@@ -68,7 +68,7 @@
   --background-color: var(--color-space);
   --text-color: var(--color-ivory);
   --muted-color: var(--color-mist);
-  --rule-color: rgba(127, 183, 217, .18);
+  --rule-color: rgb(127 183 217 / 18%);
   --plate-color: var(--color-navy-800);
   --link-color: var(--color-accent);
   --link-hover-color: var(--color-accent-bright);
@@ -170,7 +170,7 @@ pre {
 code {
   padding: .1em .35em;
   border-radius: var(--radius-sm);
-  background-color: rgba(127, 183, 217, .14);
+  background-color: rgb(127 183 217 / 14%);
 }
 
 pre {
@@ -270,7 +270,7 @@ button.button.primary:focus-visible {
 
 a.button.secondary,
 button.button.secondary {
-  border-color: rgba(247, 244, 238, .35);
+  border-color: rgb(247 244 238 / 35%);
   background-color: transparent;
   color: var(--color-ivory);
 }
@@ -280,7 +280,7 @@ a.button.secondary:focus-visible,
 button.button.secondary:hover,
 button.button.secondary:focus-visible {
   border-color: var(--color-ivory);
-  background-color: rgba(247, 244, 238, .08);
+  background-color: rgb(247 244 238 / 8%);
   text-decoration: none;
 }
 

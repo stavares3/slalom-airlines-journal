@@ -27,7 +27,6 @@ import {
 } from './aem.js';
 import { initDataLayer } from './datalayer.js';
 import { initEdgeBridge, connectEdge } from './edge-bridge.js';
-import { loadTags } from './delayed.js';
 
 /**
  * load fonts.css and set a session storage flag
@@ -46,9 +45,10 @@ async function loadFonts() {
  * The Journal has none yet; the hook stays so later tasks slot in cleanly.
  * @param {Element} main The container element
  */
+// eslint-disable-next-line no-unused-vars
 function buildAutoBlocks(main) {
   try {
-    // no auto blocks in E4-0
+    // No auto blocks yet. main is the container later hooks will decorate.
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -183,8 +183,10 @@ function loadDelayed() {
   // everything queued since loadEager flushes then.
   connectEdge();
   // Adobe Tags, from the slair-tags-library meta in head.html. Off unless a
-  // deployment sets it, and the delayed phase keeps it clear of LCP.
-  loadTags();
+  // deployment sets it. The import is dynamic, as in the boilerplate's own
+  // loadDelayed, so delayed.js is a separate chunk fetched after the page is
+  // interactive rather than parsed as part of the eager module graph.
+  import('./delayed.js').then(({ loadTags }) => loadTags());
 }
 
 async function loadPage() {

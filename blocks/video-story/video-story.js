@@ -20,7 +20,9 @@ import { registerComponent, attachMediaTracking, pushEvent } from '../../scripts
 import { siteUrl } from '../../scripts/site-links.js';
 
 /* Destination the film sells, from the document's slalomair:destination tag. */
-const CITIES = { nrt: 'Tokyo', lhr: 'London', cdg: 'Paris', hnl: 'Honolulu', syd: 'Sydney', jfk: 'New York', den: 'Denver', sea: 'Seattle' };
+const CITIES = {
+  nrt: 'Tokyo', lhr: 'London', cdg: 'Paris', hnl: 'Honolulu', syd: 'Sydney', jfk: 'New York', den: 'Denver', sea: 'Seattle',
+};
 // The call to action takes over the last frame: it appears when the film ends (or within the
 // final quarter second, so the hand-off is clean on players that fire ended late).
 const CTA_LEAD_SECONDS = 0.25;
@@ -124,7 +126,7 @@ export default function decorate(block) {
     const panel = el('div', 'video-story-cta-panel');
     panel.append(el('span', 'video-story-cta-eyebrow', 'Slalom Airlines'));
     panel.append(el('p', 'video-story-cta-title', `Book your trip to ${destination.city} now`));
-    panel.append(el('p', 'video-story-cta-text', `Nonstop from Seattle. Every fare held free for 24 hours.`));
+    panel.append(el('p', 'video-story-cta-text', 'Nonstop from Seattle. Every fare held free for 24 hours.'));
     const actions = el('div', 'video-story-cta-actions');
     const book = el('a', 'button primary video-story-cta-book', `Book Seattle to ${destination.city}`);
     book.href = siteUrl('/book', { dest: destination.code, origin: 'SEA' });
@@ -142,19 +144,26 @@ export default function decorate(block) {
       if (!shown) {
         shown = true;
         window.adobeDataLayer.push({ component: { [ctaId]: { '@type': 'slalomair/components/video-cta', title: cta.dataset.cmpTitle } } });
-        pushEvent('cmp:show', { id: ctaId, type: 'video-cta', destination: destination.code, mediaId });
+        pushEvent('cmp:show', {
+          id: ctaId, type: 'video-cta', destination: destination.code, mediaId,
+        });
       }
     };
     video.addEventListener('timeupdate', () => {
-      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - CTA_LEAD_SECONDS) reveal();
+      const known = Number.isFinite(video.duration) && video.duration > 0;
+      if (known && video.currentTime >= video.duration - CTA_LEAD_SECONDS) reveal();
     });
     video.addEventListener('ended', reveal);
     video.addEventListener('seeking', () => { if (video.currentTime < video.duration - CTA_LEAD_SECONDS) cta.hidden = true; });
     book.addEventListener('click', () => {
-      pushEvent('cmp:click', { id: ctaId, type: 'video-cta', action: 'book', destination: destination.code, mediaId, position: Math.round(video.currentTime) });
+      pushEvent('cmp:click', {
+        id: ctaId, type: 'video-cta', action: 'book', destination: destination.code, mediaId, position: Math.round(video.currentTime),
+      });
     });
     replay.addEventListener('click', () => {
-      pushEvent('cmp:click', { id: ctaId, type: 'video-cta', action: 'replay', destination: destination.code, mediaId });
+      pushEvent('cmp:click', {
+        id: ctaId, type: 'video-cta', action: 'replay', destination: destination.code, mediaId,
+      });
       cta.hidden = true;
       video.currentTime = 0;
       video.play();
