@@ -121,12 +121,19 @@ Two more things that cost time and are cheap to know:
   looks stale may be exactly that, so test against a target filename that has
   never existed.
 
-**Still open: the `image` column is empty on all six article rows.** The home
-page row resolves its image correctly and the articles do not, and the
-difference is that the home page's image reference was repaired in the da.live
-editor while the articles still carry the references pushed by
-`aem content push`. The likely fix is to re-add each article's image in da.live,
-which would repair the article page and its card thumbnail together. Unverified.
+**The `image` column is populated. Closed 2026-09-25.** All six article rows
+carry a real path, checked by reading `/query-index.json` on the live bus:
+
+```
+/articles/media_19037b55f822779d888ea05e1f89909e5df516359.jpg?width=1200&format=pjpg&optimize=medium
+```
+
+This section described that column as empty on every article row for some time
+after it stopped being true. The theory recorded here was that re-adding each
+image in the da.live editor would repair the article page and its card thumbnail
+together, and that may simply have been done; **why it resolved was not
+established**, so do not treat the theory as confirmed. Read the index before
+repeating any claim about this column.
 
 ## Editing these documents in Document Authoring
 
