@@ -10,7 +10,7 @@
 
 main .default-content-wrapper a:not(.button) {
   text-decoration: underline;
-  text-decoration-color: rgba(79, 201, 232, .45);
+  text-decoration-color: rgb(79 201 232 / 45%);
   text-underline-offset: .18em;
 }
 

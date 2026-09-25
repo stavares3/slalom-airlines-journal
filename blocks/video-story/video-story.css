@@ -26,7 +26,7 @@ main .video-story .video-story-play {
   inset: 0;
   width: 100%;
   border: 0;
-  background-color: rgba(6, 13, 31, .35);
+  background-color: rgb(6 13 31 / 35%);
   color: var(--color-ivory);
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@ main .video-story .video-story-play {
 
 main .video-story .video-story-play:hover,
 main .video-story .video-story-play:focus-visible {
-  background-color: rgba(6, 13, 31, .5);
+  background-color: rgb(6 13 31 / 50%);
 }
 
 main .video-story .video-story-play:focus-visible {
@@ -80,7 +80,7 @@ main .video-story .video-story-cta {
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
-  background: rgba(6, 13, 31, .86);
+  background: rgb(6 13 31 / 86%);
   backdrop-filter: blur(6px);
   pointer-events: none;
   animation: video-story-cta-in .5s ease-out;
@@ -192,6 +192,7 @@ main .video-story .video-story-fullscreen-glyph {
   height: .8rem;
   border: 2px solid currentcolor;
   border-radius: 2px;
+
   /* corner brackets: mask away the middles of each edge */
   mask: linear-gradient(#000, #000) top left / .25rem .25rem no-repeat,
     linear-gradient(#000, #000) top right / .25rem .25rem no-repeat,

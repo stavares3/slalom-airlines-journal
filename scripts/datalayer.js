@@ -165,16 +165,21 @@ export function attachMediaTracking(media, { mediaType, mediaId, title }) {
   let watched = 0;
   let maxPosition = 0;
   let lastTime = null;
-  const payload = (position) => ({
-    mediaType,
-    mediaId,
-    title,
-    duration: seconds(media.duration),
-    position: seconds(position),
-    watchedSeconds: seconds(watched),
-    maxPosition: seconds(maxPosition),
-    percentWatched: Number.isFinite(media.duration) && media.duration > 0 ? Math.min(100, Math.round((maxPosition / media.duration) * 100)) : 0,
-  });
+  const payload = (position) => {
+    const hasDuration = Number.isFinite(media.duration) && media.duration > 0;
+    return {
+      mediaType,
+      mediaId,
+      title,
+      duration: seconds(media.duration),
+      position: seconds(position),
+      watchedSeconds: seconds(watched),
+      maxPosition: seconds(maxPosition),
+      percentWatched: hasDuration
+        ? Math.min(100, Math.round((maxPosition / media.duration) * 100))
+        : 0,
+    };
+  };
 
   media.addEventListener('playing', () => {
     if (fired.has('start')) return;

@@ -31,7 +31,7 @@ main .cards .cards-card-link:hover,
 main .cards .cards-card-link:focus-visible {
   color: var(--text-color);
   text-decoration: none;
-  border-color: rgba(79, 201, 232, .35);
+  border-color: rgb(79 201 232 / 35%);
   box-shadow: var(--shadow-soft);
   transform: translateY(-2px);
 }

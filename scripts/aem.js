@@ -1,8 +1,8 @@
 /*
  * Vendored VERBATIM from adobe/aem-boilerplate scripts/aem.js
  * Source: https://raw.githubusercontent.com/adobe/aem-boilerplate/main/scripts/aem.js
- * Revision: d75bfd2cf0d91284b1e26c65e15cdf46820d6a4b (main HEAD, 2026-08-18)
- * Fetched: 2026-09-02 for Slalom Airlines Journal (Phase 4, task E4-0)
+ * Revision: 680f7f8b7fc59d34a08a8814b0b27f08715be7cb (main HEAD, 2026-09-18)
+ * Refreshed: 2026-09-25 for Slalom Airlines Journal (boilerplate parity pass)
  * Not modified below this header. RUM is disabled at runtime by head.html setting
  * window.SAMPLE_PAGEVIEWS_AT_RATE = "off" before this module evaluates, so no RUM
  * ping or enhancer request ever leaves the machine.
@@ -166,31 +166,21 @@ function sampleRUM(checkpoint, data) {
 /**
  * Setup block utils.
  */
-function setup() {
+function setup(importUrl = import.meta.url) {
   window.hlx = window.hlx || {};
   window.hlx.RUM_MASK_URL = 'full';
   window.hlx.RUM_MANUAL_ENHANCE = true;
-  window.hlx.codeBasePath = '';
   window.hlx.lighthouse = new URLSearchParams(window.location.search).get('lighthouse') === 'on';
 
-  const scriptEl = document.querySelector('script[src$="/scripts/scripts.js"]');
-  if (scriptEl) {
-    try {
-      [window.hlx.codeBasePath] = new URL(scriptEl.src).pathname.split('/scripts/scripts.js');
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  }
+  [window.hlx.codeBasePath] = new URL(importUrl).pathname.split('/scripts/');
 }
 
 /**
  * Auto initialization.
  */
-
 function init() {
   setup();
-  sampleRUM.collectBaseURL = window.origin;
+  sampleRUM.collectBaseURL = new URL(`${window.hlx.codeBasePath}/`, window.origin);
   sampleRUM();
 }
 
