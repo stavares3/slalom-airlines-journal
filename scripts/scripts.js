@@ -1,12 +1,7 @@
 /*
  * Journal boot, modeled on adobe/aem-boilerplate scripts/scripts.js
- * (revision d75bfd2cf0d91284b1e26c65e15cdf46820d6a4b): decorateMain plus the
+ * (revision 680f7f8b7fc59d34a08a8814b0b27f08715be7cb): decorateMain plus the
  * loadEager / loadLazy / loadDelayed phases. Local deviations, on purpose:
- *  - no Content-Security-Policy meta and no trusted-types bootstrap: the
- *    boilerplate pair (CSP meta + default policy shim) exists for edge
- *    delivery; locally it fights the aem-cli livereload injection and the
- *    inline RUM-off switch. The 404.html shipped by the boilerplate itself
- *    omits require-trusted-types-for the same way.
  *  - no fragment/widget auto-blocking yet (no such blocks in the Journal).
  *  - the Adobe Client Data Layer boots first, per the platform dictionary:
  *    page + user pushes, then page:loaded, before first paint work starts.
@@ -27,6 +22,40 @@ import {
 } from './aem.js';
 import { initDataLayer } from './datalayer.js';
 import { initEdgeBridge, connectEdge } from './edge-bridge.js';
+
+// Trusted types, vendored from the boilerplate's own bootstrap. This is the
+// other half of the Content-Security-Policy in head.html: that policy sets
+// require-trusted-types-for 'script', which makes every innerHTML assignment
+// and every script.src assignment throw unless a default policy exists to
+// convert the string. The two ship together and neither works alone.
+//
+// The policy is a compatibility shim rather than a hardening measure. It
+// passes values through, stripping only an iframe srcdoc and any script
+// element arriving through a fragment sink. The hardening is the CSP itself.
+if (window.trustedTypes && window.trustedTypes.createPolicy) {
+  const innerTT = window.trustedTypes.createPolicy('tt-inner', {
+    createHTML: (s) => s, // avoid stack overflow
+  });
+
+  window.trustedTypes.createPolicy('default', {
+    createHTML: (input, type, sink) => {
+      let processedInput = input;
+      if (/srcdoc\s*=/i.test(processedInput)) {
+        const doc = new DOMParser().parseFromString(innerTT.createHTML(processedInput), 'text/html');
+        doc.querySelectorAll('iframe[srcdoc]').forEach((el) => el.removeAttribute('srcdoc'));
+        processedInput = doc.body.innerHTML;
+      }
+      if (sink.includes('createContextualFragment') || sink.includes('Document write')) {
+        const doc = new DOMParser().parseFromString(innerTT.createHTML(processedInput), 'text/html');
+        doc.querySelectorAll('script').forEach((el) => el.remove());
+        processedInput = doc.body.innerHTML;
+      }
+      return processedInput;
+    },
+    createScriptURL: (input) => input,
+    createScript: (input) => input,
+  });
+}
 
 /**
  * load fonts.css and set a session storage flag
