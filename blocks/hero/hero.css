@@ -1,22 +1,24 @@
-/* Journal hero: image behind one solid midnight scrim, ivory type on top.
-   The plate keeps the editorial page's rounded cover-image geometry; the
-   scrim is a single flat veil, never a gradient, and the type is solid. */
+/* Journal hero: the photograph and the type side by side, never on top of each
+   other. The aircraft fills the middle of the cover photograph, so any type
+   laid over it crossed the fuselage and the SLALOM wordmark (2026-10-02). On a
+   wide screen the type takes a midnight column on the left and the photograph
+   a panel on the right; on a narrow one the photograph sits above the type.
+   The plate keeps the editorial page's rounded cover-image geometry, and there
+   is no gradient anywhere in the block. */
 
 main .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  min-height: clamp(24rem, 66vh, 40rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   border-radius: var(--radius-lg);
   background-color: var(--color-midnight);
 }
 
 main .hero .hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  position: relative;
+  aspect-ratio: 16 / 9;
 }
 
 main .hero .hero-media picture {
@@ -26,26 +28,44 @@ main .hero .hero-media picture {
 }
 
 main .hero .hero-media img {
+  display: block;
   width: 100%;
   height: 100%;
   max-width: none;
   border-radius: 0;
   object-fit: cover;
-  object-position: center 45%;
+  object-position: 40% 50%;
 }
 
+/* The type no longer sits on the photograph, so the veil is not needed. The
+   element is still created by hero.js and kept for any future overlay use. */
 main .hero .hero-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-color: rgb(6 13 31 / 55%);
+  display: none;
 }
 
 main .hero .hero-content {
   position: relative;
-  z-index: 2;
-  max-width: 52rem;
-  padding: var(--space-6) var(--space-5) var(--space-5);
+  padding: var(--space-5) var(--space-4) var(--space-5);
+}
+
+@media (width >= 1200px) {
+  main .hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-height: clamp(26rem, 62vh, 38rem);
+  }
+
+  main .hero .hero-media {
+    grid-column: 2;
+    grid-row: 1;
+    aspect-ratio: auto;
+  }
+
+  main .hero .hero-content {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: var(--space-6) var(--space-5);
+  }
 }
 
 main .hero .hero-eyebrow {
@@ -62,7 +82,7 @@ main .hero h1,
 main .hero h2,
 main .hero h3 {
   margin: 0;
-  font-size: var(--display-xl);
+  font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.4rem);
   color: var(--color-ivory);
   text-wrap: balance;
 }
@@ -78,12 +98,11 @@ main .hero .hero-standfirst {
 
 @media (width < 600px) {
   main .hero {
-    min-height: clamp(22rem, 78vh, 34rem);
     border-radius: var(--radius-md);
   }
 
   main .hero .hero-content {
-    padding: var(--space-5) var(--space-4) var(--space-4);
+    padding: var(--space-4) var(--space-4) var(--space-5);
   }
 }
 

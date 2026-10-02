@@ -1,11 +1,10 @@
 /*
  * Journal hero. Decorates the authored hero table (one cell holding an
  * image, an eyebrow paragraph, the title heading, an optional standfirst
- * paragraph, and optionally one or more links) into the site's hero grammar: the
- * image fills the block behind
- * one SOLID midnight scrim with ivory type on top. No gradient anywhere in
- * this block, in the scrim or in the text; the masthead swoosh stays the
- * Journal's single gradient moment.
+ * paragraph, and optionally one or more links) into the site's hero grammar:
+ * the photograph and the ivory type sit side by side on a midnight plate, never
+ * one on top of the other (hero.css says why). No gradient anywhere in this
+ * block; the masthead swoosh stays the Journal's single gradient moment.
  *
  * A paragraph below the title that holds only a link is a call to action, and
  * is kept exactly as the boilerplate decorated it rather than being reclassed
