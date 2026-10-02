@@ -54,4 +54,4 @@
 # file alone is not enough. Full procedure, and the whole diagnosis:
 # docs/journal-eds-sharepoint-runbook.md in the slalom-airlines monorepo.
 mountpoints:
-  /: https://twodegrees1.sharepoint.com/teams/SlalomAirlinesDemo/Shared%20Documents/journal
+  /: https://content.da.live/stavares3/slalom-airlines-journal/
