@@ -20,6 +20,20 @@ main .article-header .article-header-meta {
   color: var(--muted-color);
 }
 
+/* On a phone the byline takes a line of its own, so the row breaks in the same place
+   whatever font is drawing it. Before, the fallback font (Arial, absent on Linux and
+   Android) was wide enough to wrap the row, Inter was not, and when Inter arrived the
+   article jumped up 32px: a layout shift of 0.25, measured by Lighthouse 2026-10-03. */
+@media (width < 600px) {
+  main .article-header .article-header-byline {
+    flex-basis: 100%;
+  }
+
+  main .article-header .article-header-byline + .article-header-dot {
+    display: none;
+  }
+}
+
 main .article-header .article-header-byline {
   font-weight: 620;
   color: var(--color-glacier);
