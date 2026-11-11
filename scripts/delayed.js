@@ -79,3 +79,30 @@ export function loadTags() {
   document.head.append(script);
   return true;
 }
+
+let dataLayerLoaded = null;
+
+/**
+ * Loads the Adobe Client Data Layer library, vendored at
+ * scripts/vendor/adobe-client-data-layer.min.js (version 2.0.2, the version the
+ * flagship AEM site runs). It augments window.adobeDataLayer in place: the
+ * entries datalayer.js has already pushed are processed in order, and the
+ * array gains getState and addEventListener, which the Tags property's data
+ * elements and rules read. Resolves either way, so a failed load never stops
+ * the consent banner or Tags from loading.
+ * @returns {Promise<boolean>} true when the library is running
+ */
+export function loadDataLayerLibrary() {
+  if (!dataLayerLoaded) {
+    dataLayerLoaded = new Promise((resolve) => {
+      if (typeof window.adobeDataLayer?.getState === 'function') { resolve(true); return; }
+      const script = document.createElement('script');
+      script.src = `${window.hlx?.codeBasePath || ''}/scripts/vendor/adobe-client-data-layer.min.js`;
+      script.async = true;
+      script.onload = () => resolve(typeof window.adobeDataLayer?.getState === 'function');
+      script.onerror = () => resolve(false);
+      document.head.append(script);
+    });
+  }
+  return dataLayerLoaded;
+}
