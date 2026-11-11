@@ -215,7 +215,21 @@ function loadDelayed() {
   // deployment sets it. The import is dynamic, as in the boilerplate's own
   // loadDelayed, so delayed.js is a separate chunk fetched after the page is
   // interactive rather than parsed as part of the eager module graph.
-  import('./delayed.js').then(({ loadTags }) => loadTags());
+  //
+  // Order matters. The Tags property's rules listen on the Adobe Client Data
+  // Layer (its "Data Pushed" events), which the flagship site gets from AEM
+  // Core Components and the Journal does not. So the library loads first and
+  // turns the array the page has been pushing to into a live data layer,
+  // replaying page:loaded for Tags. Then the stored consent choice is pushed,
+  // or the banner shown, and only then Tags itself. Without the library no Tags
+  // rule fires on the Journal; without a consent choice the Web SDK holds the
+  // page view, because the property's default consent is pending.
+  import('./delayed.js').then(async ({ loadTags, loadDataLayerLibrary }) => {
+    await loadDataLayerLibrary();
+    const { initConsent } = await import('./consent.js');
+    initConsent();
+    loadTags();
+  });
 }
 
 async function loadPage() {

@@ -64,6 +64,21 @@ footer .footer-legal p {
   color: var(--color-mist);
 }
 
+footer .footer-consent {
+  margin-top: var(--space-2);
+  border: 0;
+  padding: 0;
+  background: none;
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+footer .footer-consent:hover {
+  color: var(--color-accent-bright);
+  text-decoration: underline;
+}
+
 @media (width < 600px) {
   footer .footer-inner {
     grid-template-columns: 1fr;

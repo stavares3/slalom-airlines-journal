@@ -46,6 +46,14 @@ export default async function decorate(block) {
 
   const legal = el('div', 'footer-legal');
   legal.append(el('p', null, `Slalom Airlines is a fictional carrier created for an Adobe Experience Cloud demonstration. Copyright ${new Date().getFullYear()} Slalom Airlines.`));
+  // Reopens the cookie banner with the preferences showing (scripts/consent.js).
+  const prefs = el('button', 'footer-consent', 'Cookie preferences');
+  prefs.type = 'button';
+  prefs.addEventListener('click', async () => {
+    const { openConsentPreferences } = await import('../../scripts/consent.js');
+    openConsentPreferences();
+  });
+  legal.append(prefs);
 
   inner.append(brandCol, nav, legal);
   block.append(inner);
