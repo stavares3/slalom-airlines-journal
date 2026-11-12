@@ -1,4 +1,5 @@
-/* Journal footer: quiet midnight band closing the page. Solid accents only. */
+/* Journal footer: the flagship site's footer (aem/ui.frontend footer.css),
+   restated in the Journal's tokens. Solid accents only. */
 
 footer .footer {
   margin-top: var(--space-6);
@@ -7,59 +8,99 @@ footer .footer {
   border-top: 1px solid var(--rule-color);
 }
 
-footer .footer-inner {
+footer .footer-top {
   max-width: var(--container);
   margin: 0 auto;
-  padding: var(--space-5) var(--space-4);
+  padding: var(--space-6) var(--space-4);
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--space-4);
-  align-items: start;
+  grid-template-columns: 1.1fr 2fr;
+  gap: var(--space-6);
 }
 
-footer .footer-wordmark {
-  margin: 0;
+footer .footer-logo {
+  display: block;
+  height: 2.2rem;
+  width: auto;
+  margin-bottom: var(--space-3);
+}
+
+footer .footer-wordmark-text {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: 30px;
   font-weight: 600;
+  letter-spacing: .02em;
+}
+
+footer .footer-wordmark-sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .32em;
 }
 
 footer .footer-tagline {
-  margin: var(--space-1) 0 0;
-  font-size: var(--text-sm);
-  color: var(--color-glacier);
-  letter-spacing: .06em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--color-mist);
 }
 
-footer .footer-nav-list {
-  list-style: none;
-  display: flex;
+footer .footer-rule {
+  width: 5.5rem;
+  height: 2px;
+  margin: var(--space-3) 0 0;
+  border: 0;
+  background: var(--color-glacier);
+}
+
+footer .footer-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-4);
+}
+
+footer .footer-col h2 {
+  margin: 0 0 var(--space-3);
+  font: 600 var(--text-xs) / 1 var(--font-sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+
+footer .footer-col ul {
+  list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  gap: var(--space-2);
 }
 
-footer .footer-nav-link {
+footer .footer-col a {
   font-size: var(--text-sm);
-  font-weight: 560;
   color: var(--color-ivory);
-  text-decoration: none;
-}
-
-footer .footer-nav-link:hover,
-footer .footer-nav-link:focus-visible {
-  color: var(--color-accent-bright);
   text-decoration: underline;
+  text-underline-offset: .18em;
 }
 
-footer .footer-legal {
-  grid-column: 1 / -1;
-  border-top: 1px solid rgb(247 244 238 / 14%);
-  padding-top: var(--space-3);
+footer .footer-col a:hover,
+footer .footer-col a:focus-visible {
+  color: var(--color-accent-bright);
 }
 
-footer .footer-legal p {
+footer .footer-bottom-bar {
+  border-top: 1px solid rgb(127 183 217 / 14%);
+}
+
+footer .footer-bottom {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4);
+}
+
+footer .footer-bottom p {
   margin: 0;
+  max-width: 46rem;
   font-size: var(--text-xs);
   color: var(--color-mist);
 }
@@ -79,8 +120,18 @@ footer .footer-consent:hover {
   text-decoration: underline;
 }
 
-@media (width < 600px) {
-  footer .footer-inner {
+@media (width < 900px) {
+  footer .footer-top {
+    grid-template-columns: 1fr;
+  }
+
+  footer .footer-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width < 560px) {
+  footer .footer-columns {
     grid-template-columns: 1fr;
   }
 }
