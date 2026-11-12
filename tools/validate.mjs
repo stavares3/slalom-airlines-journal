@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const EXPECTED = { blocks: 8, articles: 6 };
+const EXPECTED = { blocks: 9, articles: 6 };
 
 // Article Template row values and the media block each one must embed
 // (task E4-2): podcast pages carry the podcast player, film pages carry the
@@ -300,6 +300,25 @@ if (existsSync(hlxIgnorePath)) {
     if (/^tools\/?\*?$/.test(pattern) || /^tools\/sidekick/.test(pattern)) {
       errors.push(`.hlxignore: "${pattern}" excludes tools/sidekick/config.json, which the Sidekick fetches over the code bus`);
     }
+  }
+}
+
+/* The XDM tenant prefix is configuration, not a constant: custom fields are
+   namespaced under the Adobe org's tenant, which differs per org and sandbox.
+   A literal is wrong everywhere except the one org it was written for, and
+   wrong silently, because the Edge accepts the event and drops only the custom
+   fields. */
+{
+  const bridge = read(path.join(ROOT, "scripts/edge-bridge.js"));
+  const code = bridge.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  if (/_slalomair/.test(code)) {
+    errors.push("scripts/edge-bridge.js names the XDM tenant prefix literally; it must come from the slair-xdm-tenant meta tag");
+  }
+  if (!bridge.includes("slair-xdm-tenant")) {
+    errors.push("scripts/edge-bridge.js emits custom XDM but never reads the slair-xdm-tenant meta tag");
+  }
+  if (!/xdmTenant\s*&&/.test(bridge)) {
+    errors.push("scripts/edge-bridge.js connects to the Edge without requiring a tenant, which would send events carrying no custom fields");
   }
 }
 

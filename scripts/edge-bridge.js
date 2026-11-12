@@ -9,7 +9,7 @@
  *    boots). It replays the entries already on window.adobeDataLayer, then
  *    wraps push so every later { event, eventInfo } for a forwarded event
  *    name is mapped to XDM (same rule as the prototype's xdm.js: eventType
- *    "slalomair.<name with : as .>", payload spread into _slalomair) and
+ *    "slalomair.<name with : as .>", payload spread into the tenant namespace) and
  *    queued.
  *  - connectEdge() runs late (loadDelayed). With a datastream configured
  *    it loads the Web SDK library from the URL the deployment names,
@@ -19,13 +19,19 @@
  *    do against a real datastream.
  *
  * Configuration comes from head.html meta tags, all empty in the repo:
- *   slair-datastream-id, slair-org-id, slair-edge-domain (optional),
- *   slair-alloy-src (the Web SDK library URL, or a self-hosted copy).
+ *   slair-datastream-id, slair-org-id, slair-xdm-tenant, slair-edge-domain
+ *   (optional), slair-alloy-src (the Web SDK library URL, or a self-hosted copy).
  * Nothing here loads a third-party script unless those are set.
  */
 
 const FORWARD = new Set(['cmp:show', 'cmp:click', 'media:start', 'media:pause', 'media:progress', 'media:complete', 'media:unload']);
 const meta = (name) => document.head.querySelector(`meta[name="${name}"]`)?.content?.trim() || '';
+
+// Custom fields are namespaced under the Adobe org's XDM tenant, which differs
+// per org and sandbox, so it is configuration like the datastream. Read once:
+// these builders run long before connectEdge, and a prefix that changed halfway
+// through a page would split one visit across two shapes.
+const XDM_TENANT = `_${meta('slair-xdm-tenant')}`;
 
 const queue = [];
 let connected = false;
@@ -36,7 +42,7 @@ function stamp() { return new Date().toISOString(); }
 
 /*
  * The standard page block every event carries. siteSection goes on the XDM
- * standard path as well as in _slalomair, because the standard path is the one
+ * standard path as well as in the tenant namespace, because the standard path is the one
  * the flagship site populates and the one the Customer Journey Analytics Site
  * Section dimension reads: without it, Journal rows report a blank section
  * beside the site's own. The optional page argument lets a page view use the
@@ -59,7 +65,7 @@ export function xdmFromPage(page) {
     eventType: 'web.webpagedetails.pageViews',
     timestamp: stamp(),
     ...pageDetails(page),
-    _slalomair: {
+    [XDM_TENANT]: {
       template: page.template,
       language: page.language,
       currency: page.currency,
@@ -74,7 +80,7 @@ export function xdmFromEvent(event, info = {}) {
     eventType: `slalomair.${event.replaceAll(':', '.')}`,
     timestamp: stamp(),
     ...pageDetails(),
-    _slalomair: { ...info, siteSection: 'journal' },
+    [XDM_TENANT]: { ...info, siteSection: 'journal' },
   };
 }
 
@@ -136,10 +142,14 @@ export async function connectEdge() {
   connected = true;
   const datastreamId = meta('slair-datastream-id');
   const orgId = meta('slair-org-id');
+  const xdmTenant = meta('slair-xdm-tenant');
   const edgeDomain = meta('slair-edge-domain');
   const alloySrc = meta('slair-alloy-src');
   let send = null;
-  if (datastreamId && orgId && alloySrc) {
+  // The tenant is required for the same reason the other two are, and a sharper
+  // one: a missing prefix is accepted by the Edge and only the custom fields are
+  // dropped, so collecting without it would look healthy and carry nothing.
+  if (datastreamId && orgId && xdmTenant && alloySrc) {
     try {
       await loadAlloy(alloySrc);
       // defaultConsent 'in' is a decision taken on 2026-09-25, not an oversight.
